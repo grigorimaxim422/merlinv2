@@ -102,13 +102,13 @@ def load_emotion():
         raise RuntimeError("Emotion2Vector processing failed.")
 
 
-def get_tts_score(request: str) -> dict:
+def get_tts_score(model_name) -> dict:
     """
     Calculate and return the TTS scores with optional weighting.
 
     :param request: The request object containing necessary details for scoring.
     :return: A dictionary with the final score and any errors.
-    """
+    """    
 
     # Load the dataset containing input data for scoring.
     data = load_dataset()
@@ -155,3 +155,12 @@ def get_tts_score(request: str) -> dict:
 
     # Return the final result dictionary containing the score and any errors.
     return result
+
+import argparse
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser("model_name", type=str, default="models/model.pt")
+    args = parser.parse_args()
+    score = get_tts_score(args.model_name)
+    print("----------------")
+    print(f"score={score}")
+    print("----------------")
