@@ -5,7 +5,7 @@ python3 main.py "ylacombe/jenny-tts-6h" \
   --audio_column_name "audio" \
   --cpu_num_workers 2 \
   --num_workers_per_gpu_for_pitch 2 \
-  --output_dir "tmp_cache01" \
+  --output_dir "_cache_tags" \
   --rename_column
   
 #  --rename_column \

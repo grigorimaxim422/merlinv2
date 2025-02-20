@@ -457,7 +457,11 @@ def main():
         # load on a split-wise basis
         for split in data_splits:
             with accelerator.local_main_process_first():
-                raw_datasets[split] = load_from_disk(data_args.dataset_name)
+                raw_datasets[split] = load_from_disk(data_args.dataset_name,
+                    data_args.dataset_config_name,
+                    split=split,                    
+                    token=model_args.token,
+                    num_proc=data_args.preprocessing_num_workers)
                 # raw_datasets[split] = load_dataset(
                 #     data_args.dataset_name,
                 #     data_args.dataset_config_name,
@@ -469,7 +473,10 @@ def main():
     else:
         with accelerator.local_main_process_first():
             # load all splits for annotation
-            raw_datasets = load_from_disk(data_args.dataset_name)
+            raw_datasets = load_from_disk(data_args.dataset_name,
+                data_args.dataset_config_name,                
+                token=model_args.token,
+                num_proc=data_args.preprocessing_num_workers)
             # raw_datasets = load_dataset(
             #     data_args.dataset_name,
             #     data_args.dataset_config_name,

@@ -5,4 +5,4 @@ wip_scripts/*
 plots/*
 .vscode/*
 tmp_jenny/
-_cache/
+_cache*/
