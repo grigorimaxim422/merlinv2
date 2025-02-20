@@ -10,8 +10,8 @@
 # print("SNR 1st sample", dataset["train"][0]["snr"])
 # print("C50 2nd sample", dataset["train"][0]["c50"])
 # del dataset
-from datasets import load_dataset
-dataset = load_dataset("grigorimaxim/jenny-tts-tags-6h")
+from datasets import load_from_disk
+dataset = load_from_disk("_cache_tags")
 print("SNR 1st sample", dataset["train"][0]["snr"])
 print("C50 2nd sample", dataset["train"][0]["c50"])
 del dataset

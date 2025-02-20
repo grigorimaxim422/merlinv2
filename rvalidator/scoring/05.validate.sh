@@ -1,1 +1,0 @@
-python3 offline_tts_score --model_name "models/model.pt"

@@ -474,9 +474,10 @@ def main():
         with accelerator.local_main_process_first():
             # load all splits for annotation
             raw_datasets = load_from_disk(data_args.dataset_name,
-                data_args.dataset_config_name,                
-                token=model_args.token,
-                num_proc=data_args.preprocessing_num_workers)
+                data_args.dataset_config_name)                
+                # token=model_args.token,
+                # num_proc=data_args.preprocessing_num_workers
+                #)#
             # raw_datasets = load_dataset(
             #     data_args.dataset_name,
             #     data_args.dataset_config_name,

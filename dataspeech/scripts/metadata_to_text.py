@@ -241,7 +241,7 @@ if __name__ == "__main__":
                 dataset.append(tmp_dataset)
         else:
             # dataset = [load_dataset(args.dataset_name, args.configuration, num_proc=args.cpu_num_workers)]
-            dataset = [load_from_disk(args.dataset_name, args.configuration, num_proc=args.cpu_num_workers)]
+            dataset = [load_from_disk(args.dataset_name, args.configuration)]
             dataset_configs = [args.configuration]
     else:
         if "+" in args.dataset_name:

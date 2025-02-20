@@ -1,0 +1,1 @@
+python3 rvalidator/offline_tts_score.py --model_name "models/model.pt"

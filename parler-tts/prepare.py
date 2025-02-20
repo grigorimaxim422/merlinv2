@@ -93,6 +93,8 @@ def main():
 
     feature_extractor = AutoFeatureExtractor.from_pretrained(model_args.feature_extractor_name or model_args.model_name_or_path,
         cache_dir=model_args.cache_dir)
+    sampling_rate = feature_extractor.sampling_rate
+    
     del feature_extractor
     
     prompt_tokenizer = AutoTokenizer.from_pretrained(
@@ -104,6 +106,13 @@ def main():
         model_args.description_tokenizer_name or model_args.model_name_or_path,
         cache_dir=model_args.cache_dir)
     del description_tokenizer
+    
+    columns_to_keep = {
+        "target_audio_column_name": data_args.target_audio_column_name,
+        "prompt_column_name": data_args.prompt_column_name,
+    }
+
+    raw_datasets = DatasetDict()
     
     raw_datasets["train"] = load_multiple_datasets(
         accelerator,

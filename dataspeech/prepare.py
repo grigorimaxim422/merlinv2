@@ -8,7 +8,7 @@ from transformers import (
     AutoTokenizer,
 )
 
-DATA_CACHE_DIR="_cache/"
+DATA_CACHE_DIR="../_cache/"
 
 if __name__ == "__main__":
     set_start_method("spawn")
