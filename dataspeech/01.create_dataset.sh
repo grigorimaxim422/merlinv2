@@ -5,6 +5,8 @@ python3 main.py "ylacombe/jenny-tts-6h" \
   --audio_column_name "audio" \
   --cpu_num_workers 2 \
   --num_workers_per_gpu_for_pitch 2 \
-  --rename_column \
-  --repo_id "jenny-tts-tags-6h"
+  --rename_column
+  
+#  --rename_column \
+#  --repo_id "jenny-tts-tags-6h"
 

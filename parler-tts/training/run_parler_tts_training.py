@@ -233,7 +233,7 @@ def main():
     # assume that the dataset has been saved to `save_to_disk` if the latter is not empty
     dataset_was_precomputed = len(os.listdir(data_args.save_to_disk)) > 0
     if dataset_was_precomputed:
-        with accelerator.local_main_process_first():
+        with accelerator.local_main_process_first():            
             vectorized_datasets = datasets.load_from_disk(data_args.save_to_disk)
     else:
         raw_datasets = DatasetDict()
@@ -838,6 +838,7 @@ def main():
     accelerator.wait_for_everyone()
 
     if checkpoint is not None:
+        print(f"--------------Load Checkpoint {checkpoint}")
         accelerator.load_state(checkpoint)
         # Find num steps and epoch from saved state string pattern
         pattern = r"checkpoint-(\d+)-epoch-(\d+)"

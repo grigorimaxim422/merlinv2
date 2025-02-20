@@ -205,6 +205,7 @@ def load_multiple_datasets(
     # iterate over the datasets we want to interleave
     for dataset_dict in tqdm(dataset_names_dict, desc="Combining datasets..."):
         with accelerator.local_main_process_first():
+            print(f"Data:load_dataset:{dataset_dict}")
             dataset = load_dataset(
                 dataset_dict["name"],
                 dataset_dict["config"],
@@ -223,6 +224,8 @@ def load_multiple_datasets(
                 logger.info(
                     f'Merging {dataset_dict["name"]} - {dataset_dict["split"]} with {metadata_dataset_name} - {dataset_dict["split"]}'
                 )
+                
+                print(f"metadata_set load_dataset:{metadata_dataset_name}")
                 metadata_dataset = load_dataset(
                     metadata_dataset_name,
                     dataset_dict["config"],

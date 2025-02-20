@@ -11,6 +11,7 @@
     --eval_dataset_name "ylacombe/jenny-tts-6h" \
     --eval_metadata_dataset_name "grigorimaxim/jenny-tts-6h-tagged" \
     --eval_dataset_config_name "default" \
+    --cache_dir "tmp_cache" \
     --eval_split_name "train" \
     --max_eval_samples 8 \
     --per_device_eval_batch_size 8 \
