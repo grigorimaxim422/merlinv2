@@ -49,6 +49,11 @@ def main():
     del whisper_model
     del whisper_processor
     
+    
+    #Load Eval score
+    
+    
+    
 if __name__ == "__main__":
     main()
  
