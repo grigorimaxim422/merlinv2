@@ -38,9 +38,9 @@
     --audio_encoder_per_device_batch_size 4 \
     --dtype "float16" \
     --seed 456 \
-    --output_dir "./output_dir_training/" \
-    --temporary_save_to_disk "./audio_code_tmp/" \
-    --save_to_disk "./tmp_dataset_audio/" \
+    --output_dir "../output_dir_training/" \
+    --temporary_save_to_disk "../audio_code_tmp/" \
+    --save_to_disk "../tmp_dataset_audio/" \
     --dataloader_num_workers 2 \
     --do_eval \
     --predict_with_generate \
