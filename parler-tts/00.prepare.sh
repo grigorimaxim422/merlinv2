@@ -5,13 +5,13 @@
     --prompt_tokenizer_name "parler-tts/parler_tts_mini_v0.1" \
     --overwrite_output_dir true \
     --train_dataset_name "ylacombe/jenny-tts-6h" \
-    --train_metadata_dataset_name "../_cache_tags_bin" \
+    --train_metadata_dataset_name "../_cache_datasets" \
     --train_dataset_config_name "default" \
     --train_split_name "train" \
     --eval_dataset_name "ylacombe/jenny-tts-6h" \
-    --eval_metadata_dataset_name "../_cache_tags_bin" \
+    --eval_metadata_dataset_name "../_cache_datasets" \
     --eval_dataset_config_name "default" \
-    --cache_dir "tmp_cache" \
+    --cache_dir "../_cache" \
     --eval_split_name "train" \
     --max_eval_samples 8 \
     --per_device_eval_batch_size 8 \

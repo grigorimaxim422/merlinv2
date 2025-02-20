@@ -457,34 +457,34 @@ def main():
         # load on a split-wise basis
         for split in data_splits:
             with accelerator.local_main_process_first():
-                raw_datasets[split] = load_from_disk(data_args.dataset_name,
-                    data_args.dataset_config_name,
-                    split=split,                    
-                    token=model_args.token,
-                    num_proc=data_args.preprocessing_num_workers)
-                # raw_datasets[split] = load_dataset(
-                #     data_args.dataset_name,
+                # raw_datasets[split] = load_from_disk(data_args.dataset_name,
                 #     data_args.dataset_config_name,
-                #     split=split,
-                #     cache_dir=model_args.cache_dir,
+                #     split=split,                    
                 #     token=model_args.token,
-                #     num_proc=data_args.preprocessing_num_workers,
-                # )
+                #     num_proc=data_args.preprocessing_num_workers)
+                raw_datasets[split] = load_dataset(
+                    data_args.dataset_name,
+                    data_args.dataset_config_name,
+                    split=split,
+                    cache_dir=model_args.cache_dir,
+                    token=model_args.token,
+                    num_proc=data_args.preprocessing_num_workers,
+                    format="parquet"
+                )
     else:
         with accelerator.local_main_process_first():
             # load all splits for annotation
-            raw_datasets = load_from_disk(data_args.dataset_name,
-                data_args.dataset_config_name)                
-                # token=model_args.token,
-                # num_proc=data_args.preprocessing_num_workers
-                #)#
-            # raw_datasets = load_dataset(
-            #     data_args.dataset_name,
-            #     data_args.dataset_config_name,
-            #     cache_dir=model_args.cache_dir,
-            #     token=model_args.token,
-            #     num_proc=data_args.preprocessing_num_workers,
-            # )
+            # raw_datasets = load_from_disk(data_args.dataset_name,
+            #     data_args.dataset_config_name)                
+                
+            raw_datasets = load_dataset(
+                data_args.dataset_name,
+                data_args.dataset_config_name,
+                cache_dir=model_args.cache_dir,
+                token=model_args.token,
+                num_proc=data_args.preprocessing_num_workers,
+                format="parquet"
+            )
 
     raw_datasets_features = set(raw_datasets[next(iter(raw_datasets))].features.keys())
 

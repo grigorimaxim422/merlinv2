@@ -236,12 +236,12 @@ if __name__ == "__main__":
             
             dataset = []
             for dataset_name, dataset_config in zip(dataset_names, dataset_configs):
-                # tmp_dataset = load_dataset(dataset_name, dataset_config, num_proc=args.cpu_num_workers)
-                tmp_datset = load_from_disk(dataset_name, dataset_config, num_proc=args.cpu_num_workers)
+                tmp_dataset = load_dataset(dataset_name, dataset_config, num_proc=args.cpu_num_workers, format='parquet')
+                # tmp_datset = load_from_disk(dataset_name, dataset_config, num_proc=args.cpu_num_workers)
                 dataset.append(tmp_dataset)
         else:
-            # dataset = [load_dataset(args.dataset_name, args.configuration, num_proc=args.cpu_num_workers)]
-            dataset = [load_from_disk(args.dataset_name, args.configuration)]
+            dataset = [load_dataset(args.dataset_name, args.configuration, num_proc=args.cpu_num_workers,format='parquet')]
+            # dataset = [load_from_disk(args.dataset_name, args.configuration)]
             dataset_configs = [args.configuration]
     else:
         if "+" in args.dataset_name:
@@ -258,13 +258,13 @@ if __name__ == "__main__":
             
             dataset = []
             for dataset_name, dataset_config in zip(dataset_names):
-                #tmp_dataset = load_dataset(dataset_name, num_proc=args.cpu_num_workers)
-                tmp_dataset = load_from_disk(dataset_name, num_proc=args.cpu_num_workers)
+                tmp_dataset = load_dataset(dataset_name, num_proc=args.cpu_num_workers,format='parquet')
+                # tmp_dataset = load_from_disk(dataset_name, num_proc=args.cpu_num_workers)
                 dataset.append(tmp_dataset)
 
         else:
-            #dataset = [load_dataset(args.dataset_name, num_proc=args.cpu_num_workers)]
-            dataset = [load_from_disk(args.dataset_name, num_proc=args.cpu_num_workers)]
+            dataset = [load_dataset(args.dataset_name, num_proc=args.cpu_num_workers,format='parquet')]
+            # dataset = [load_from_disk(args.dataset_name, num_proc=args.cpu_num_workers)]
 
     if args.plot_directory:
         Path(args.plot_directory).mkdir(parents=True, exist_ok=True)
@@ -305,7 +305,7 @@ if __name__ == "__main__":
     if not args.only_save_plot:
         if args.output_dir:
             for output_dir, df in zip(output_dirs, dataset):
-                df.save_to_disk(output_dir)
+                df.to_parquet(output_dir)
         # if args.repo_id:
         #     for i, (repo_id, df) in enumerate(zip(repo_ids, dataset)):
         #         if args.configuration:

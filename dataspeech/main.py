@@ -105,7 +105,7 @@ if __name__ == "__main__":
     
     if args.output_dir:
         print("Saving to disk...")
-        dataset.save_to_disk(args.output_dir)
+        dataset.to_parquet(args.output_dir)
     # if args.repo_id:
     #     print("Pushing to the hub...")
     #     if args.configuration:
