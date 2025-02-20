@@ -24,7 +24,7 @@ from transformers import (
 from datetime import timedelta
 from accelerate import InitProcessGroupKwargs
 
-DATA_CACHE_DIR="_cache/"
+DATA_CACHE_DIR="../_cache/"
 
 logger = get_logger(__name__, log_level="INFO")
 
@@ -535,7 +535,7 @@ def main():
         quantization_config=quantization_config,
         low_cpu_mem_usage=True,
         token=model_args.token,    
-        cache_dir=DATA_CACHE_DIR
+        cache_dir=model_args.cache_dir
     ).eval()
 
     if model_args.torch_compile:
@@ -555,7 +555,7 @@ def main():
         trust_remote_code=model_args.trust_remote_code,
         use_fast=model_args.use_fast_tokenizer,
         padding_side="left",
-        cache_dir=DATA_CACHE_DIR
+        cache_dir=model_args.cache_dir
     )
     if tokenizer.pad_token_id is None:
         tokenizer.pad_token_id = tokenizer.bos_token_id
