@@ -16,6 +16,7 @@ pip install --quiet -e .[train] -->
 cd parler-tts
 pip install  -e .[train]
 pip install  -r ../dataspeech/requirements.txt
+pip install  -r ../rvalidator/requirements.txt
 pip install --upgrade protobuf wandb==0.16.6
 
 git config --global credential.helper store
