@@ -35,3 +35,9 @@ python3 tf01.py
 python3 tf02.py
 
 ./03.create_nld_from_textbin.sh
+
+cd ..
+cd parler-tts
+
+chmod +x *.sh
+./04.finetune.sh
