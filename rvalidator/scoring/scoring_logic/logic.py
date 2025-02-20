@@ -24,7 +24,7 @@ from transformers import AutoTokenizer, WhisperForConditionalGeneration, Whisper
 from huggingface_hub import login
 
 logger = logging.getLogger(__name__)
-
+DATASET_CACHE_DIR = "evalsets"
 SPEAKERS = [
     {
         "name": "Will",
@@ -152,11 +152,13 @@ def calculate_human_similarity_score(audio_emo_vector, model_file_name, pca_file
     model_path = hf_hub_download(
         repo_id="DippyAI-Speech/Discriminator",
         filename=model_file_name,  # Replace with the correct filename if different
+        cache_dir=DATASET_CACHE_DIR
     )
 
     # Load the state dictionary into the model
     pca_model_path = hf_hub_download(
-        repo_id="DippyAI-Speech/PCA", filename=pca_file_name  # Replace with the correct filename if different
+        repo_id="DippyAI-Speech/PCA", filename=pca_file_name ,
+        cache_dir = DATASET_CACHE_DIR# Replace with the correct filename if different
     )
 
     state_dict = torch.load(model_path, map_location=torch.device("cpu"))
