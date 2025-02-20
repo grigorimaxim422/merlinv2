@@ -44,8 +44,8 @@ def main():
     
     #whisper
     # Load the Whisper model and processor from Hugging Face
-    whisper_model = WhisperForConditionalGeneration.from_pretrained("openai/whisper-small.en", cache_dir=DATASET_CACHE_DIR)
-    whisper_processor = WhisperProcessor.from_pretrained("openai/whisper-small.en", cache_dir=DATASET_CACHE_DIR)
+    whisper_model = WhisperForConditionalGeneration.from_pretrained("openai/whisper-tiny", cache_dir=DATASET_CACHE_DIR)
+    whisper_processor = WhisperProcessor.from_pretrained("openai/whisper-tiny", cache_dir=DATASET_CACHE_DIR)
     del whisper_model
     del whisper_processor
     

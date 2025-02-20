@@ -221,16 +221,16 @@ def calculate_wer(reference: str, hypothesis: str, apply_preprocessing: bool = T
     return error_rate
 
 
-# def load_whisper_model(device):
-#     try:
-#         whisper_model_name = "openai/whisper-tiny"
-#         processor = WhisperProcessor.from_pretrained(whisper_model_name)
-#         whisper_model = WhisperForConditionalGeneration.from_pretrained(whisper_model_name).to(device)
-#         logger.info("Whisper Tiny model loaded successfully.")
-#         return processor, whisper_model
-#     except Exception as e:
-#         logger.error(f"Failed to load Whisper Tiny model: {e}", exc_info=True)
-#         raise RuntimeError("Whisper model loading failed.")
+def load_whisper_model(device):
+    try:
+        whisper_model_name = "openai/whisper-tiny"
+        processor = WhisperProcessor.from_pretrained(whisper_model_name)
+        whisper_model = WhisperForConditionalGeneration.from_pretrained(whisper_model_name).to(device)
+        logger.info("Whisper Tiny model loaded successfully.")
+        return processor, whisper_model
+    except Exception as e:
+        logger.error(f"Failed to load Whisper Tiny model: {e}", exc_info=True)
+        raise RuntimeError("Whisper model loading failed.")
 
 
 # def load_parler_model(repo_namespace, repo_name, device):
@@ -296,28 +296,28 @@ def process_emotion(audio_path, emotion_inference_pipeline):
         raise RuntimeError("Emotion2Vector processing failed.")
 
 
-# def transcribe_audio(audio_path, processor, whisper_model, device):
-#     try:
-#         audio, sample_rate = sf.read(audio_path)
+def transcribe_audio_offline(audio_path, processor, whisper_model, device):
+    try:
+        audio, sample_rate = sf.read(audio_path)
 
-#         # Resample the audio to 16,000 Hz if necessary
-#         if sample_rate != 16000:
-#             audio = librosa.resample(audio, orig_sr=sample_rate, target_sr=16000)
-#             sample_rate = 16000
+        # Resample the audio to 16,000 Hz if necessary
+        if sample_rate != 16000:
+            audio = librosa.resample(audio, orig_sr=sample_rate, target_sr=16000)
+            sample_rate = 16000
 
-#         # Clamp audio to avoid clipping issues
-#         audio = np.clip(audio, -1.0, 1.0)
+        # Clamp audio to avoid clipping issues
+        audio = np.clip(audio, -1.0, 1.0)
 
-#         inputs = processor(audio, sampling_rate=sample_rate, return_tensors="pt").to(device)
+        inputs = processor(audio, sampling_rate=sample_rate, return_tensors="pt").to(device)
 
-#         with torch.no_grad():
-#             predicted_ids = whisper_model.generate(inputs.input_features)
-#         transcription = processor.batch_decode(predicted_ids, skip_special_tokens=True)[0]
-#         logger.info(f"Transcription: {transcription}")
-#         return transcription
-#     except Exception as e:
-#         logger.error(f"Error during transcription with Whisper Tiny: {e}", exc_info=True)
-#         raise RuntimeError(f"Audio transcription failed: {e}")
+        with torch.no_grad():
+            predicted_ids = whisper_model.generate(inputs.input_features)
+        transcription = processor.batch_decode(predicted_ids, skip_special_tokens=True)[0]
+        logger.info(f"Transcription: {transcription}")
+        return transcription
+    except Exception as e:
+        logger.error(f"Error during transcription with Whisper Tiny: {e}", exc_info=True)
+        raise RuntimeError(f"Audio transcription failed: {e}")
 
 
 def transcribe_audio(audio_path, transcription_url=TRANSCRIPTION_URL):
@@ -400,7 +400,7 @@ def scoring_workflow(repo_namespace, repo_name, text, voice_description, device,
 
 
     # Load models
-    # processor, whisper_model = load_whisper_model(device)
+    processor, whisper_model = load_whisper_model(device)
     # model, tokenizer = load_parler_model(repo_namespace, repo_name, device)
 
     # Initialize speaker
@@ -418,7 +418,8 @@ def scoring_workflow(repo_namespace, repo_name, text, voice_description, device,
 
 
         # Transcribe audio
-        transcription = transcribe_audio(audio_path)
+        # transcription = transcribe_audio(audio_path)
+        transcription = transcribe_audio_offline(audio_path, porcessor, whisper_model, device)
 
 
     # Validate results
