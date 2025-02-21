@@ -47,7 +47,7 @@ import requests
 
 
 def get_latest_from_set():
-    with open("_cache/response.json", "r") as file:
+    with open("cache/response.json", "r") as file:
         data = json.load(file)
         
     return data

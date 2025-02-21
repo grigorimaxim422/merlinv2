@@ -158,8 +158,9 @@ def get_tts_score(model_name:str, cache_dir:str) -> dict:
 
 import argparse
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser("model_name", type=str, default="output_dir_training")
-    parser = argparse.ArgumentParser("--cache_dir", type=str, default="../_cache")
+    parser = argparse.ArgumentParser()
+    parser.add_argument("model_name", type=str, default="../output_dir_training")
+    parser.add_argument("--cache_dir", type=str, default="../_cache")    
     args = parser.parse_args()
     score = get_tts_score(args.model_name, args.cache_dir)
     print("----------------")

@@ -1,3 +1,2 @@
-python3 -m scoring.offline_tts_score  "models/model.pt" \
-    --cache_dir "../_cache" \
-    --repo_id "parler0220"
+python3 -m scoring.offline_tts_score  "../output_dir_training" \
+    --cache_dir "../_cache" 
