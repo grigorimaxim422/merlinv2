@@ -182,12 +182,13 @@ if __name__ == "__main__":
     # parser.add_argument("--repo_namespace", type=str, default="grigorimaxim")    
     # parser.add_argument("--repo_name", type=str, default="parler0220")       
     
-    # parser.add_argument("--repo_namespace", type=str, default="godofmining")
-    # parser.add_argument("--repo_name", type=str, default="shidou14")        
+    #First
+    parser.add_argument("--repo_namespace", type=str, default="godofmining")
+    parser.add_argument("--repo_name", type=str, default="shidou14")        
     
 #    parler-tts/parler-tts-mini-v1
-    parser.add_argument("--repo_namespace", type=str, default="parler-tts")
-    parser.add_argument("--repo_name", type=str, default="parler-tts-mini-v1")        
+    # parser.add_argument("--repo_namespace", type=str, default="parler-tts")
+    # parser.add_argument("--repo_name", type=str, default="parler-tts-mini-v1")        
 
     args = parser.parse_args()
     score = get_tts_score(args)

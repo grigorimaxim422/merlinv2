@@ -228,8 +228,8 @@ def calculate_wer(reference: str, hypothesis: str, apply_preprocessing: bool = T
 def load_whisper_model(device):
     try:
         whisper_model_name = "openai/whisper-small.en"
-        processor = WhisperProcessor.from_pretrained(whisper_model_name)
-        whisper_model = WhisperForConditionalGeneration.from_pretrained(whisper_model_name).to(device)
+        processor = WhisperProcessor.from_pretrained(whisper_model_name, cache_dir=DATASET_CACHE_DIR)
+        whisper_model = WhisperForConditionalGeneration.from_pretrained(whisper_model_name,cache_dir=DATASET_CACHE_DIR).to(device)
         logger.info("Whisper Tiny model loaded successfully.")
         return processor, whisper_model
     except Exception as e:
