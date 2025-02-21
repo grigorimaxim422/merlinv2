@@ -167,13 +167,13 @@ def main():
     # )
     # del raw_datasets['eval']
     
-    config = ParlerTTSConfig.from_pretrained(
-        model_args.model_name_or_path,
-        cache_dir=model_args.cache_dir,
-        token=data_args.token,
-        trust_remote_code=data_args.trust_remote_code,
-    )
-    del config
+    # config = ParlerTTSConfig.from_pretrained(
+    #     model_args.model_name_or_path,
+    #     cache_dir=model_args.cache_dir,
+    #     token=data_args.token,
+    #     trust_remote_code=data_args.trust_remote_code,
+    # )
+    # del config
     
     print(f"All data loaded seems to cached in cache_dir {model_args.cache_dir}")
     
