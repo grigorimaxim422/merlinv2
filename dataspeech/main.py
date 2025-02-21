@@ -1,6 +1,7 @@
 from datasets import load_dataset, Audio, load_from_disk
 from multiprocess import set_start_method
 from dataspeech import rate_apply, pitch_apply, snr_apply, squim_apply
+from utils import save_dataset
 import torch
 import argparse
 
@@ -105,8 +106,9 @@ if __name__ == "__main__":
     
     if args.output_dir:
         print("Saving to disk...")
-        for split in dataset.keys():
-            dataset[split].to_parquet(f"{args.output_dir}/{split}.parquet")
+        save_dataset(dataset, args.output_dir)
+        # for split in dataset.keys():
+        #     dataset[split].to_parquet(f"{args.output_dir}/{split}.parquet")
     # if args.repo_id:
     #     print("Pushing to the hub...")
     #     if args.configuration:
