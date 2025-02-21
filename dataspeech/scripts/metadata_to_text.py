@@ -237,11 +237,11 @@ if __name__ == "__main__":
             
             dataset = []
             for dataset_name, dataset_config in zip(dataset_names, dataset_configs):
-                tmp_dataset = load_dataset(dataset_name, dataset_config, num_proc=args.cpu_num_workers, format='parquet')
+                tmp_dataset = load_dataset(dataset_name, dataset_config, num_proc=args.cpu_num_workers)
                 # tmp_datset = load_from_disk(dataset_name, dataset_config, num_proc=args.cpu_num_workers)
                 dataset.append(tmp_dataset)
         else:
-            dataset = [load_dataset(args.dataset_name, args.configuration, num_proc=args.cpu_num_workers,format='parquet')]
+            dataset = [load_dataset(args.dataset_name, args.configuration, num_proc=args.cpu_num_workers)]
             # dataset = [load_from_disk(args.dataset_name, args.configuration)]
             dataset_configs = [args.configuration]
     else:
@@ -305,8 +305,11 @@ if __name__ == "__main__":
         
     if not args.only_save_plot:
         if args.output_dir:
-            for i, (repo_id, df) in enumerate(zip(repo_ids, dataset)):
+            # for i, (df) in enumerate(zip(dataset)):
+            for df in dataset:
+                print(df)
                 for split in df.keys():
+                    
                     save_dataset(df[split], args.output_dir, split)                
                 
             # for output_dir, df in zip(output_dirs, dataset):
