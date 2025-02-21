@@ -3,3 +3,5 @@ _cache_datasets/
 _cache*/
 _cache/
 __pycache__/
+tmp_*/
+*_tmp/
