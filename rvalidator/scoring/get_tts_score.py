@@ -138,8 +138,11 @@ def get_tts_score(request) -> dict:
     # # Define the weights for scoring, with 'text_length' having a default weight of 1.
     # weights = {"text_length": 1}
 
-    device = "cuda:0" if torch.cuda.is_available() else "cpu"
+    device = "cuda:1" if torch.cuda.is_available() else "cpu"
+    logger.info(f"Device selected for computation: {device}")    
     logger.info(f"Device selected for computation: {device}")
+    logger.info(f"Device selected for computation: {device}")
+    
     processor, whisper_model = load_whisper_model(device)
     model, tokenizer = load_parler_model(request.repo_namespace, request.repo_name, device)
 
@@ -179,12 +182,12 @@ def get_tts_score(request) -> dict:
 import argparse
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    # parser.add_argument("--repo_namespace", type=str, default="grigorimaxim")    
-    # parser.add_argument("--repo_name", type=str, default="parler0220")       
+    parser.add_argument("--repo_namespace", type=str, default="grigorimaxim")    
+    parser.add_argument("--repo_name", type=str, default="parler0220")       
     
     #First
-    parser.add_argument("--repo_namespace", type=str, default="godofmining")
-    parser.add_argument("--repo_name", type=str, default="shidou14")        
+    # parser.add_argument("--repo_namespace", type=str, default="godofmining")
+    # parser.add_argument("--repo_name", type=str, default="shidou14")        
     
 #    parler-tts/parler-tts-mini-v1
     # parser.add_argument("--repo_namespace", type=str, default="parler-tts")

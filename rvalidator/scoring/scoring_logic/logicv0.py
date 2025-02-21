@@ -166,7 +166,8 @@ def calculate_human_similarity_score(audio_emo_vector, model_file_name, pca_file
     print("calc_hss:01: model_load_state_dict done!")
 
     # Move the model to the appropriate device
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    # device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    device="cuda:1"
     model.to(device)
     
     # Set the model to evaluation mode
