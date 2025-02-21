@@ -91,6 +91,7 @@ def main():
         kwargs_handlers=kwargs_handlers,
     )
     
+    print(f"loading model:333 {model_args.model_name_or_path}...")
     model = ParlerTTSForConditionalGeneration.from_pretrained(
         model_args.model_name_or_path,
         cache_dir=model_args.cache_dir)
