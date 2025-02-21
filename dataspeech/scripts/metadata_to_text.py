@@ -306,7 +306,8 @@ if __name__ == "__main__":
     if not args.only_save_plot:
         if args.output_dir:
             for i, (repo_id, df) in enumerate(zip(repo_ids, dataset)):
-                save_dataset(df['train'], args.output_dir, 'train')                
+                for split in df.keys():
+                    save_dataset(df[split], args.output_dir, split)                
                 
             # for output_dir, df in zip(output_dirs, dataset):
             #     save_dataset(dataset_configs[i],)
