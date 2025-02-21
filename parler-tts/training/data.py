@@ -231,7 +231,7 @@ def load_multiple_datasets(
                     dataset_dict["config"],
                     split=dataset_dict["split"],
                     streaming=streaming,
-                    format="parquet",
+                    # format="parquet",
                     **kwargs,
                 )
                 # metadata_dataset = load_from_disk(metadata_dataset_name,

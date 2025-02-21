@@ -7,6 +7,9 @@ from transformers import (
     AutoModelForCausalLM,
     AutoTokenizer,
 )
+from pyannote.audio import Model
+from pathlib import Path
+from huggingface_hub import hf_hub_download
 
 DATA_CACHE_DIR="../_cache/"
 
@@ -31,7 +34,7 @@ if __name__ == "__main__":
     parser.add_argument("--num_workers_per_gpu_for_snr", default=1, type=int, help="Number of workers per GPU for the SNR and reverberation estimation if GPUs are available. Defaults to 1 if some are avaiable. Useful if you want multiple processes per GPUs to maximise GPU usage.")
     parser.add_argument("--apply_squim_quality_estimation", action="store_true", help="If set, will also use torchaudio-squim estimation (SI-SNR, STOI and PESQ).")
     parser.add_argument("--num_workers_per_gpu_for_squim", default=1, type=int, help="Number of workers per GPU for the SI-SNR, STOI and PESQ estimation if GPUs are available. Defaults to 1 if some are avaiable. Useful if you want multiple processes per GPUs to maximise GPU usage.")
-
+    
 
     args = parser.parse_args()
     if args.dataset_name:    
@@ -52,3 +55,9 @@ if __name__ == "__main__":
         del model
         del tokenizer
         print(f"LM model and tokenizer loaded! {args.model_name_or_path}")
+        
+    model = Model.from_pretrained(
+            Path(hf_hub_download(repo_id="ylacombe/brouhaha-best", filename="best.ckpt", cache_dir=DATA_CACHE_DIR)),
+            strict=False,
+        )
+    print(f"ylacombe/brouhaha-best pulled down!")

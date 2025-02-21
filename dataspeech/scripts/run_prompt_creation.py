@@ -469,8 +469,7 @@ def main():
                     split=split,
                     cache_dir=model_args.cache_dir,
                     token=model_args.token,
-                    num_proc=data_args.preprocessing_num_workers,
-                    format="parquet"
+                    num_proc=data_args.preprocessing_num_workers
                 )
     else:
         with accelerator.local_main_process_first():
@@ -483,8 +482,8 @@ def main():
                 data_args.dataset_config_name,
                 cache_dir=model_args.cache_dir,
                 token=model_args.token,
-                num_proc=data_args.preprocessing_num_workers,
-                format="parquet"
+                num_proc=data_args.preprocessing_num_workers
+                
             )
 
     raw_datasets_features = set(raw_datasets[next(iter(raw_datasets))].features.keys())

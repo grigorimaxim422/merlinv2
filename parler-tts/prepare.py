@@ -22,7 +22,7 @@ from transformers import AutoFeatureExtractor, AutoTokenizer, HfArgumentParser
 from transformers.trainer_pt_utils import LengthGroupedSampler
 from transformers.optimization import get_scheduler
 from transformers.utils import send_example_telemetry
-
+from datasets import load_dataset
 
 from accelerate import Accelerator, skip_first_batches
 from accelerate.utils import set_seed, AutocastKwargs, InitProcessGroupKwargs, TorchDynamoPlugin, DistributedDataParallelKwargs
@@ -112,47 +112,53 @@ def main():
         "prompt_column_name": data_args.prompt_column_name,
     }
 
-    raw_datasets = DatasetDict()
+    # raw_datasets = DatasetDict()
     
-    raw_datasets["train"] = load_multiple_datasets(
-        accelerator,
-        data_args.train_dataset_name,
-        data_args.train_dataset_config_name,
-        metadata_dataset_names=data_args.train_metadata_dataset_name,
-        splits=data_args.train_split_name,
-        dataset_samples=data_args.train_dataset_samples,
-        seed=training_args.seed,
-        cache_dir=model_args.cache_dir,
-        num_proc=data_args.preprocessing_num_workers,
-        id_column_name=data_args.id_column_name,
-        columns_to_keep=columns_to_keep.values(),
-        prompt_column_name=data_args.prompt_column_name,
-        audio_column_name=data_args.target_audio_column_name,
-        sampling_rate=sampling_rate,
-        logger=logger,
-        # streaming=data_args.streaming, TODO(SG): optionally enable streaming mode
-    )
-    del raw_datasets['train']
+    model = load_dataset(data_args.train_dataset_name)
+    del model        
     
-    raw_datasets["eval"] = load_multiple_datasets(
-        accelerator,
-        data_args.eval_dataset_name if data_args.eval_dataset_name else data_args.train_dataset_name,
-        data_args.eval_dataset_config_name
-        if data_args.eval_dataset_config_name
-        else data_args.train_dataset_config_name,
-        metadata_dataset_names=data_args.eval_metadata_dataset_name,
-        splits=data_args.eval_split_name,
-        cache_dir=model_args.cache_dir,
-        num_proc=data_args.preprocessing_num_workers,
-        id_column_name=data_args.id_column_name,
-        columns_to_keep=columns_to_keep.values(),
-        prompt_column_name=data_args.prompt_column_name,
-        audio_column_name=data_args.target_audio_column_name,
-        sampling_rate=sampling_rate,
-        logger=logger,
-        # streaming=data_args.streaming, TODO(SG): optionally enable streaming mode
-    )
-    del raw_datasets['eval']
+    model = load_dataset(data_args.eval_dataset_name)
+    del model    
+    
+    # raw_datasets["train"] = load_multiple_datasets(
+    #     accelerator,
+    #     data_args.train_dataset_name,
+    #     data_args.train_dataset_config_name,
+    #     metadata_dataset_names=None,
+    #     splits=data_args.train_split_name,
+    #     dataset_samples=data_args.train_dataset_samples,
+    #     seed=training_args.seed,
+    #     cache_dir=model_args.cache_dir,
+    #     num_proc=data_args.preprocessing_num_workers,
+    #     id_column_name=data_args.id_column_name,
+    #     columns_to_keep=columns_to_keep.values(),
+    #     prompt_column_name=data_args.prompt_column_name,
+    #     audio_column_name=data_args.target_audio_column_name,
+    #     sampling_rate=sampling_rate,
+    #     logger=logger,
+    #     # streaming=data_args.streaming, TODO(SG): optionally enable streaming mode
+    # )
+    # del raw_datasets['train']
+    
+    # raw_datasets["eval"] = load_multiple_datasets(
+    #     accelerator,
+    #     data_args.eval_dataset_name if data_args.eval_dataset_name else data_args.train_dataset_name,
+    #     data_args.eval_dataset_config_name
+    #     if data_args.eval_dataset_config_name
+    #     else data_args.train_dataset_config_name,
+    #     metadata_dataset_names=None,
+    #     splits=data_args.eval_split_name,
+    #     cache_dir=model_args.cache_dir,
+    #     num_proc=data_args.preprocessing_num_workers,
+    #     id_column_name=data_args.id_column_name,
+    #     columns_to_keep=columns_to_keep.values(),
+    #     prompt_column_name=data_args.prompt_column_name,
+    #     audio_column_name=data_args.target_audio_column_name,
+    #     sampling_rate=sampling_rate,
+    #     logger=logger,
+    #     # streaming=data_args.streaming, TODO(SG): optionally enable streaming mode
+    # )
+    # del raw_datasets['eval']
     
     config = ParlerTTSConfig.from_pretrained(
         model_args.model_name_or_path,
