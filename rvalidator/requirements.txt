@@ -1,69 +1,71 @@
-fastapi 
-transformers 
-torch 
-pydantic 
-uvicorn
-tiktoken
-python-multipart
-pydantic
-transformers
-torch
-pandas
-sentencepiece
-protobuf
-python-dotenv
-tiktoken
-threadpoolctl
-wandb
-loguru
-numpy
-jurigged
-ray
-modelscope
-pydantic
-transformers
-torch
-pandas
-sentencepiece
-protobuf
-python-dotenv
-tiktoken
-threadpoolctl
-loguru
-numpy
-jurigged
-black
-isort
-APScheduler==3.11.0
-schedule==1.2.2
-wheel
-setuptools
-docker
-packaging
-accelerate
-bitsandbytes
-supabase
-pandas
-threadpoolctl
-loguru
-typer
-fastapi
-uvicorn
-jurigged
-gtts
-scikit-learn
-speechbrain
-funasr
-modelscope
-addict==2.4.0
-#datasets
-simplejson
-sortedcontainers
-scipy
-pydub
-black
-isort
-rich
-colorama
-librosa
-jiwer
+# fastapi 
+# transformers 
+# torch 
+# pydantic 
+# uvicorn
+# tiktoken
+# python-multipart
+# pydantic
+# transformers
+# torch
+# pandas
+# sentencepiece
+# protobuf
+# python-dotenv
+# tiktoken
+# threadpoolctl
+# wandb
+# loguru
+# numpy
+# jurigged
+# ray
+# modelscope
+# pydantic
+# transformers
+# torch
+# pandas
+# sentencepiece
+# protobuf
+# python-dotenv
+# tiktoken
+# threadpoolctl
+# loguru
+# numpy
+# jurigged
+# black
+# isort
+# APScheduler==3.11.0
+# schedule==1.2.2
+# wheel
+# setuptools
+# docker
+# packaging
+# accelerate
+# bitsandbytes
+# supabase
+# pandas
+# threadpoolctl
+# loguru
+# typer
+# fastapi
+# uvicorn
+# jurigged
+# gtts
+# scikit-learn
+# speechbrain
+# funasr
+# modelscope
+# addict==2.4.0
+# datasets
+# simplejson
+# sortedcontainers
+# scipy
+# pydub
+# black
+# isort
+# rich
+# colorama
+# librosa
+# jiwer
+# # datasets
+# Pillow

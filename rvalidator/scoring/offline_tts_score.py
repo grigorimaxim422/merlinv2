@@ -17,7 +17,7 @@ from modelscope.utils.constant import Tasks
 from transformers import AutoTokenizer, WhisperForConditionalGeneration, WhisperProcessor
 
 logger = logging.getLogger(__name__)  # Create a logger for this module
-
+DATASET_CACHE_DIR = "../_cache"
 def _prepare_tts_score():
     inference_pipeline = pipeline(task=Tasks.emotion_recognition, model="iic/emotion2vec_plus_large")    
     # model = ParlerTTSForConditionalGeneration.from_pretrained(model_name)
@@ -79,13 +79,34 @@ def load_dataset():
         failure_reason = str(e)
         raise Exception(f"Error loading dataset: {failure_reason}")
 
+def apply_weights(base_score: float, wer: float) -> float:
+    """
+    Adjust the base score by incorporating the Word Error Rate (WER).
+
+    :param base_score: The initial score before weighting.
+    :param wer: The Word Error Rate (WER) of the transcription.
+    :return: The weighted score, with base_score and WER equally weighted (50% each).
+    """
+    base_score = base_score[0]
+
+    # Handle WER weighting
+    if wer == 0.0:  # Perfect transcription
+        wer_weighted_score = 1.0  # Perfect score for WER
+    else:
+        wer_weighted_score = 1.0 - wer  # Scale WER score (lower WER is better)
+
+    # Combine base score and WER score with 50% weight each
+    weighted_score = 0.5 * base_score + 0.5 * wer_weighted_score
+
+    return weighted_score
+
 
     
 def load_parler_model(model_name, device):
     # model_name = f"{repo_namespace}/{repo_name}"
     try:
-        model = ParlerTTSForConditionalGeneration.from_pretrained(model_name).to(device)
-        tokenizer = AutoTokenizer.from_pretrained(model_name)
+        model = ParlerTTSForConditionalGeneration.from_pretrained(model_name, cache_dir=DATASET_CACHE_DIR).to(device)
+        tokenizer = AutoTokenizer.from_pretrained(model_name, cache_dir=DATASET_CACHE_DIR)
         logger.info(f"Parler TTS model '{model_name}' and tokenizer loaded successfully.")
         return model, tokenizer
     except Exception as e:
@@ -138,10 +159,11 @@ def get_tts_score(model_name:str, cache_dir:str) -> dict:
 
             # Extract float values from each tensor in the 'scores' list for further processing
             float_values_from_tensors = [score.item() for score in base_score]
-
+            print(f"--base_score={float_values_from_tensors}, wer_score={wer_score}")
+            
             # Apply weights to the base score based on text properties.
             weighted_score = apply_weights(float_values_from_tensors, wer_score)
-
+            print(f"alpha weight={weighted_score}")
             # Append the weighted score to the scores list.
             scores.append(weighted_score)
 

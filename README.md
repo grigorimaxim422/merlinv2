@@ -13,6 +13,7 @@ git clone https://github.com/huggingface/parler-tts.git
 %cd parler-tts
 pip install --quiet -e .[train] -->
 
+apt install ffmpeg -y
 cd parler-tts
 pip install  -e .[train]
 pip install  -r ../dataspeech/requirements.txt
@@ -42,3 +43,30 @@ cd parler-tts
 
 chmod +x *.sh
 ./04.finetune.sh
+
+
+## How to upload to huggingface 
+- Preparation
+```
+pip install huggingface_hub
+huggingface-cli login
+```
+- Upload
+```
+
+huggingface-cli repo create your-model-name
+git lfs clone https://huggingface.co/your-username/your-model-name
+cd your-model-name
+git lfs install
+git lfs track "*.safetensors"
+git lfs track "tokenizer.json"
+git add .gitattributes
+git commit -m "init"
+git push
+
+git add .
+git commit -m "Add trained model files"
+git config user.name grigorimaxim
+git config user.email grigorimaxim@gmail.com
+git push origin main
+```

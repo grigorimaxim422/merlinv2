@@ -160,21 +160,21 @@ def calculate_human_similarity_score(audio_emo_vector, model_file_name, pca_file
         repo_id="DippyAI-Speech/PCA", filename=pca_file_name ,
         cache_dir = DATASET_CACHE_DIR# Replace with the correct filename if different
     )
-    print("Loading hub DIppyAI-Speech models to check...")
+
     state_dict = torch.load(model_path, map_location=torch.device("cpu"), weights_only=True)
-    
     model.load_state_dict(state_dict)
+    print("calc_hss:01: model_load_state_dict done!")
 
     # Move the model to the appropriate device
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model.to(device)
-
+    
     # Set the model to evaluation mode
     model.eval()
 
     # Load the PCA model
     pca = joblib.load(pca_model_path)
-
+    print("calc_hss:02: load pca model done!")
     # Ensure the input has the correct shape (batch dimension)
     if audio_emo_vector.dim() == 1:
         audio_emo_vector = audio_emo_vector.unsqueeze(0)  # Add batch dimension if needed
@@ -184,9 +184,12 @@ def calculate_human_similarity_score(audio_emo_vector, model_file_name, pca_file
         device
     )  # Ensure the tensor is on the same device as the model
 
+    print("calc_hss:03: torch.tensor done!")
     # Make a prediction
     with torch.no_grad():  # Disable gradient calculation for inference
         score = model(audio_emo_vector_pca)
+        
+    print(f"calc_hss:04: scoring done! score={score}")
 
     return score
 
@@ -224,7 +227,7 @@ def calculate_wer(reference: str, hypothesis: str, apply_preprocessing: bool = T
 
 def load_whisper_model(device):
     try:
-        whisper_model_name = "openai/whisper-tiny"
+        whisper_model_name = "openai/whisper-small.en"
         processor = WhisperProcessor.from_pretrained(whisper_model_name)
         whisper_model = WhisperForConditionalGeneration.from_pretrained(whisper_model_name).to(device)
         logger.info("Whisper Tiny model loaded successfully.")
@@ -368,7 +371,7 @@ def transcribe_audio(audio_path, transcription_url=TRANSCRIPTION_URL):
 
 
 
-def scoring_workflow(model_name, text, voice_description, device, model, tokenizer, emotion_inference_pipeline, processor, whisper_model):
+def scoring_workflow(repo_namespace, repo_name, text, voice_description, device, model, tokenizer, emotion_inference_pipeline, processor, whisper_model):
     DISCRIMINATOR_FILE_NAME = "discriminator_v1.0.pth"
     MODEL_PCA_FILE_NAME = "discriminator_pca_v1.0.pkl"
 
@@ -401,8 +404,8 @@ def scoring_workflow(model_name, text, voice_description, device, model, tokeniz
 
 
     # Load models
-    
-    # model, tokenizer = load_parler_model(model_name, device)
+    # processor, whisper_model = load_whisper_model(device)
+    # model, tokenizer = load_parler_model(repo_namespace, repo_name, device)
 
     # Initialize speaker
     speaker_index = 0
