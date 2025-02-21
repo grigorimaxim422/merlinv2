@@ -18,18 +18,18 @@ def preload_datasets():
     dataset01 = load_dataset("DippyAI/dippy_synthetic_dataset", streaming=True, token=hf_token, cache_dir=DATASET_CACHE_DIR)    
     dataset02 = load_dataset("DippyAI/personahub_augmented_v0", cache_dir=DATASET_CACHE_DIR)
     
-def _prepare_tiktoken_encoding():
-        encoding_name = tiktoken.model.MODEL_TO_ENCODING["gpt-3.5-turbo"]
-        encoding_file_path = os.path.join(tiktoken.__path__[0], "models", f"{encoding_name}.json")
-        # Ensure the directory exists
-        os.makedirs(os.path.dirname(encoding_file_path), exist_ok=True)
+# def _prepare_tiktoken_encoding():
+#         encoding_name = tiktoken.model.MODEL_TO_ENCODING["gpt-3.5-turbo"]
+#         encoding_file_path = os.path.join(tiktoken.__path__[0], "models", f"{encoding_name}.json")
+#         # Ensure the directory exists
+#         os.makedirs(os.path.dirname(encoding_file_path), exist_ok=True)
 
-        # Download and save the encoding
-        encoding = tiktoken.get_encoding(encoding_name)
-        with open(encoding_file_path, "w") as f:
-            json.dump(encoding._mergeable_ranks, f)
+#         # Download and save the encoding
+#         encoding = tiktoken.get_encoding(encoding_name)
+#         with open(encoding_file_path, "w") as f:
+#             json.dump(encoding._mergeable_ranks, f)
 
-        print(f"Encoding saved locally at {encoding_file_path}")
+#         print(f"Encoding saved locally at {encoding_file_path}")
 
     
 def prepare_from_hf_dataset(dataset_name: str, partitions: List[str]):
@@ -78,26 +78,26 @@ def get_latest_from_file(filter: str = "both", filename: str = "/tmp/dataset.jso
         data = []
     return data
 
-def _get_tiktoken_encoding():
-        encoding_name = tiktoken.model.MODEL_TO_ENCODING["gpt-3.5-turbo"]
-        encoding_file_path = os.path.join(tiktoken.__path__[0], "models", f"{encoding_name}.json")
-        encoding = None
-        # Load encoding from the local file
-        if os.path.exists(encoding_file_path):
-            with open(encoding_file_path, "r") as f:
-                mergeable_ranks = json.load(f)
-            encoding = tiktoken.Encoding(
-                name=encoding_name,
-                pat_str=tiktoken.get_encoding(encoding_name).pat_str,
-                mergeable_ranks=mergeable_ranks,
-                special_tokens=tiktoken.get_encoding(encoding_name).special_tokens,
-            )
-            print("Loaded encoding from local file.")
-        else:
-            encoding = tiktoken.encoding_for_model("gpt-3.5-turbo")
-            print("Noway, Downloaded encoding from OpenAI.")
+# def _get_tiktoken_encoding():
+#         encoding_name = tiktoken.model.MODEL_TO_ENCODING["gpt-3.5-turbo"]
+#         encoding_file_path = os.path.join(tiktoken.__path__[0], "models", f"{encoding_name}.json")
+#         encoding = None
+#         # Load encoding from the local file
+#         if os.path.exists(encoding_file_path):
+#             with open(encoding_file_path, "r") as f:
+#                 mergeable_ranks = json.load(f)
+#             encoding = tiktoken.Encoding(
+#                 name=encoding_name,
+#                 pat_str=tiktoken.get_encoding(encoding_name).pat_str,
+#                 mergeable_ranks=mergeable_ranks,
+#                 special_tokens=tiktoken.get_encoding(encoding_name).special_tokens,
+#             )
+#             print("Loaded encoding from local file.")
+#         else:
+#             encoding = tiktoken.encoding_for_model("gpt-3.5-turbo")
+#             print("Noway, Downloaded encoding from OpenAI.")
         
-        return encoding
+#         return encoding
     
 class StreamedSyntheticDataset(Dataset):
     def __init__(self, max_input_len: int, mock: bool = False):
@@ -112,7 +112,7 @@ class StreamedSyntheticDataset(Dataset):
 
         self._chat_template = None
         self._tokenizer = None
-        _prepare_tiktoken_encoding()
+        # _prepare_tiktoken_encoding()
         
 
     def debug_data(self):
@@ -154,7 +154,7 @@ class StreamedSyntheticDataset(Dataset):
         Convert dataset to a format that can be used downstream.
         """
         #encoding = tiktoken.encoding_for_model("gpt-3.5-turbo")  # to get approx token count
-        encoding = _get_tiktoken_encoding()
+        encoding = tiktoken.encoding_for_model("gpt-3.5-turbo")
         converted_dataset = []
         for data_point in data:
             system_prompt = data_point["system_prompt"]
@@ -265,7 +265,7 @@ class StreamedEvaluationSyntheticDataset(Dataset):
 
         self._chat_template = None
         self._tokenizer = None
-        _prepare_tiktoken_encoding()
+        # _prepare_tiktoken_encoding()
 
     def debug_data(self):
         data_debug = self.raw_data
@@ -306,8 +306,8 @@ class StreamedEvaluationSyntheticDataset(Dataset):
         """
         Convert dataset to a format that can be used downstream.
         """
-        # encoding = tiktoken.encoding_for_model("gpt-3.5-turbo")  # to get approx token count
-        encoding = _get_tiktoken_encoding()
+        encoding = tiktoken.encoding_for_model("gpt-3.5-turbo")  # to get approx token count
+        # encoding = _get_tiktoken_encoding()
         converted_dataset = []
         for data_point in data:
             system_prompt = data_point["system_prompt"]

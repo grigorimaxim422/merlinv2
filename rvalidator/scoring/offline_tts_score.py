@@ -5,7 +5,7 @@ import numpy as np
 
 from scoring.common import EVALUATION_DATASET_SAMPLE_SIZE, MAX_GENERATION_LENGTH, MAX_SEQ_LEN
 from scoring.offline_dataset import StreamedSyntheticDataset
-from scoring.scoring_logic.logic import scoring_workflow
+from scoring.scoring_logic.logic import scoring_workflow,load_whisper_model
 
 import torch
 import torch.nn as nn
@@ -123,14 +123,18 @@ def get_tts_score(model_name:str, cache_dir:str) -> dict:
     logger.info(f"Device selected for computation: {device}")
 
     model, tokenizer = load_parler_model(model_name, device)
-
+    print(f"Loading whisper model...")
+    processor, whisper_model = load_whisper_model(device)
     emotion_inference_pipeline = load_emotion()
-
+    print("--------------------------")
+    print(f"emotion_inference_pipeline={emotion_inference_pipeline}")
+    print("--------------------------")
     # Iterate over the data, which contains tuples of text, last user message, and voice description.
     for text, last_user_message, voice_description in data:
         try:
             # Calculate the base score and wer using the scoring workflow function.
-            base_score, wer_score = scoring_workflow(model_name, text, voice_description, device, model, tokenizer, emotion_inference_pipeline)
+            base_score, wer_score = scoring_workflow(model_name, text, voice_description, device, model, tokenizer, emotion_inference_pipeline=emotion_inference_pipeline,
+                                                    processor=processor,whisper_model=whisper_model)
 
             # Extract float values from each tensor in the 'scores' list for further processing
             float_values_from_tensors = [score.item() for score in base_score]

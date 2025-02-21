@@ -160,8 +160,9 @@ def calculate_human_similarity_score(audio_emo_vector, model_file_name, pca_file
         repo_id="DippyAI-Speech/PCA", filename=pca_file_name ,
         cache_dir = DATASET_CACHE_DIR# Replace with the correct filename if different
     )
-
+    print("Loading hub DIppyAI-Speech models to check...")
     state_dict = torch.load(model_path, map_location=torch.device("cpu"))
+    
     model.load_state_dict(state_dict)
 
     # Move the model to the appropriate device
@@ -367,41 +368,41 @@ def transcribe_audio(audio_path, transcription_url=TRANSCRIPTION_URL):
 
 
 
-def scoring_workflow(repo_namespace, repo_name, text, voice_description, device, model, tokenizer, emotion_inference_pipeline):
+def scoring_workflow(model_name, text, voice_description, device, model, tokenizer, emotion_inference_pipeline, processor, whisper_model):
     DISCRIMINATOR_FILE_NAME = "discriminator_v1.0.pth"
     MODEL_PCA_FILE_NAME = "discriminator_pca_v1.0.pkl"
 
-    try:
-        # Attempt to retrieve the Whisper API token from the environment variables
-        whisper_endpoint = os.environ.get("WHISPER_ENDPOINT")
+    # try:
+    #     # Attempt to retrieve the Whisper API token from the environment variables
+    #     whisper_endpoint = os.environ.get("WHISPER_ENDPOINT")
         
-        # Check if the token is None (i.e., not set in the environment)
-        if whisper_endpoint is None:
-            raise ValueError("WHISPER_ENDPOINT is not set in the environment.")
+    #     # Check if the token is None (i.e., not set in the environment)
+    #     if whisper_endpoint is None:
+    #         raise ValueError("WHISPER_ENDPOINT is not set in the environment.")
         
 
-    except Exception as e:
-        # Handle the exception (e.g., log the error, notify the user, etc.)
-        raise RuntimeError(f"An error occurred getting wishper endpoint url from env: {e}")
+    # except Exception as e:
+    #     # Handle the exception (e.g., log the error, notify the user, etc.)
+    #     raise RuntimeError(f"An error occurred getting wishper endpoint url from env: {e}")
     
 
-    try:
-        token = os.environ.get("HUGGINGFACE_TOKEN_PRIME")
-        if token is None:
-            raise ValueError("HUGGINGFACE_TOKEN_PRIME is not set in the environment.")
+    # try:
+    #     token = os.environ.get("HUGGINGFACE_TOKEN_PRIME")
+    #     if token is None:
+    #         raise ValueError("HUGGINGFACE_TOKEN_PRIME is not set in the environment.")
         
-        login(token=token)
-    except Exception as e:
-        # Handle the exception (e.g., log the error, notify the user, etc.)
-        raise RuntimeError(f"An error occurred during hf login: {e}")
+    #     login(token=token)
+    # except Exception as e:
+    #     # Handle the exception (e.g., log the error, notify the user, etc.)
+    #     raise RuntimeError(f"An error occurred during hf login: {e}")
 
     # device = "cuda:0" if torch.cuda.is_available() else "cpu"
     # logger.info(f"Device selected for computation: {device}")
 
 
     # Load models
-    processor, whisper_model = load_whisper_model(device)
-    # model, tokenizer = load_parler_model(repo_namespace, repo_name, device)
+    
+    # model, tokenizer = load_parler_model(model_name, device)
 
     # Initialize speaker
     speaker_index = 0

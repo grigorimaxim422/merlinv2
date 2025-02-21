@@ -11,6 +11,7 @@ from fastapi import FastAPI, UploadFile, File
 from transformers import WhisperProcessor, WhisperForConditionalGeneration
 from pydantic import BaseModel
 import io
+from modelscope.pipelines import pipeline
 
 # Initialize FastAPI app
 app = FastAPI()
@@ -22,6 +23,9 @@ DATASET_CACHE_DIR = "../_cache"
 hf_token = os.environ.get("HF_TOKEN")
 
 def main():
+    
+    inference_pipeline = pipeline(task=Tasks.emotion_recognition, model="iic/emotion2vec_plus_large")    
+    
     DISCRIMINATOR_FILE_NAME = "discriminator_v1.0.pth"
     MODEL_PCA_FILE_NAME = "discriminator_pca_v1.0.pkl"
     

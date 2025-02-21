@@ -49,7 +49,7 @@ def get_latest_from_set():
     )
     response.raise_for_status()  # Raise an error for bad responses
     data = response.json().get("all_convos", [])
-
+    print(f"get_latest_from_set={data.keys()}")
     return data
 
 
