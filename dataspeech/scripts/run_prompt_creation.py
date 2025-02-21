@@ -23,6 +23,7 @@ from transformers import (
 )
 from datetime import timedelta
 from accelerate import InitProcessGroupKwargs
+from utils import save_dataset
 
 DATA_CACHE_DIR="../_cache/"
 
@@ -670,7 +671,10 @@ def main():
         accelerator.wait_for_everyone()
 
     if accelerator.is_main_process:
-        vectorized_datasets.save_to_disk(data_args.output_dir)
+        for split in vectorized_datasets:
+            save_dataset(vectorized_datasets[split], data_args.output_dir, split)
+        # vectorized_datasets.save_to_disk(data_args.output_dir)
+
         # if data_args.push_to_hub:
         #     vectorized_datasets.push_to_hub(
         #         data_args.hub_dataset_id,

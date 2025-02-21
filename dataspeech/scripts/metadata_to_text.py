@@ -7,6 +7,7 @@ from pathlib import Path
 import os
 import matplotlib.pyplot as plt
 import json
+from utils import save_dataset
 
 SPEAKER_RATE_BINS = ["very slowly", "quite slowly", "slightly slowly", "moderate speed", "slightly fast", "quite fast", "very fast"]
 SNR_BINS = ["very noisy", "quite noisy", "slightly noisy", "moderate ambient sound", "slightly clear", "quite clear", "very clear"]
@@ -304,8 +305,12 @@ if __name__ == "__main__":
         
     if not args.only_save_plot:
         if args.output_dir:
-            for output_dir, df in zip(output_dirs, dataset):
-                df.to_parquet(output_dir)
+            for i, (repo_id, df) in enumerate(zip(repo_ids, dataset)):
+                save_dataset(df['train'], args.output_dir, 'train')                
+                
+            # for output_dir, df in zip(output_dirs, dataset):
+            #     save_dataset(dataset_configs[i],)
+                # df.to_parquet(output_dir)
         # if args.repo_id:
         #     for i, (repo_id, df) in enumerate(zip(repo_ids, dataset)):
         #         if args.configuration:

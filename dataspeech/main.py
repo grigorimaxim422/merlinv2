@@ -106,8 +106,9 @@ if __name__ == "__main__":
     
     if args.output_dir:
         print("Saving to disk...")
-        save_dataset(dataset, args.output_dir)
-        # for split in dataset.keys():
+        # save_dataset(dataset, args.output_dir)
+        for split in dataset.keys():
+            save_dataset(dataset[split], args.output_dir, split)
         #     dataset[split].to_parquet(f"{args.output_dir}/{split}.parquet")
     # if args.repo_id:
     #     print("Pushing to the hub...")
