@@ -8,7 +8,7 @@ from torch.utils.data import Dataset
 import tiktoken
 
 
-DATASET_CACHE_DIR = "evalsets"
+DATASET_CACHE_DIR = "../_cache"
 hf_token = os.environ.get("HF_TOKEN")
 
 
