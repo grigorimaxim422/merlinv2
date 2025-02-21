@@ -4,7 +4,7 @@ import json
 import numpy as np
 
 from scoring.common import EVALUATION_DATASET_SAMPLE_SIZE, MAX_GENERATION_LENGTH, MAX_SEQ_LEN
-from scoring.dataset import StreamedSyntheticDataset
+from scoring.offline_dataset import StreamedSyntheticDataset
 from scoring.scoring_logic.logic import scoring_workflow
 
 import torch

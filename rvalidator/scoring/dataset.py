@@ -32,7 +32,8 @@ DATASET_URL = "https://sn58-dataset.dippy-bittensor-subnet.com/dataset"
 DATASET_API_KEY = "someVerysecretKey"
 
 # Authentication
-VOICES_URL = "https://sn58-dataset.dippy-bittensor-subnet.com"
+# VOICES_URL = "https://sn58-dataset.dippy-bittensor-subnet.com"
+
 USERNAME = os.getenv("VASPI_USERNAME")
 PASSWORD = os.getenv("VASPI_PASSWORD")
 

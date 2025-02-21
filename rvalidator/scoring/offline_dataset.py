@@ -10,7 +10,7 @@ from datasets import load_dataset
 import tiktoken
 
 
-DATASET_CACHE_DIR = "evalsets"
+DATASET_CACHE_DIR = "../_cache"
 hf_token = os.environ.get("HF_TOKEN")
 
 #You need to call it when building Offline Docker image
@@ -44,17 +44,6 @@ def prepare_from_hf_dataset(dataset_name: str, partitions: List[str]):
 
 
 import requests
-
-
-DATASET_URL = "https://sn58-dataset.dippy-bittensor-subnet.com/dataset"
-
-# DATASET_API_KEY = os.environ.get("DATASET_API_KEY", "dippy")
-DATASET_API_KEY = "someVerysecretKey"
-
-# Authentication
-VOICES_URL = "https://sn58-dataset.dippy-bittensor-subnet.com"
-USERNAME = os.getenv("VASPI_USERNAME")
-PASSWORD = os.getenv("VASPI_PASSWORD")
 
 
 def get_latest_from_set():
