@@ -21,9 +21,9 @@ WORKDIR /workspace/parler-tts
 RUN pip install -e .[train] \
     && pip install -r /workspace/dataspeech/requirements.txt \
     && pip install -r /workspace/rvalidator/requirements.txt \
-    && pip install --upgrade protobuf wandb==0.16.6 \
+    && pip install --upgrade protobuf \
     && rm -rf /root/.cache/pip/*
-    
+
 
 RUN git config --global credential.helper store
 
@@ -31,7 +31,7 @@ RUN huggingface-cli whoami
 
 RUN chmod +x /workspace/dataspeech/*.sh && chmod +x /workspace/parler-tts/*.sh && chmod +x /workspace/rvalidator/*.sh && chmod +x /workspace/*.sh
 
-RUN ./prepare.sh
+RUN /workspace/prepare.sh
 
 CMD ["sh", "-c", "bin/sh"]
 
