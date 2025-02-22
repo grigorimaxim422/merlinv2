@@ -11,7 +11,11 @@ RUN apt update && apt upgrade -y && apt install screen speedtest-cli git-lfs  ff
 COPY . /workspace
 
 RUN pip install --upgrade pip \
-    && pip install --upgrade pip setuptools
+    && pip install --upgrade pip setuptools \
+    && pip install huggingface-hub
+
+RUN python /workspace/login.py
+
 
 COPY token /root/.huggingface/token
 COPY stored_tokens /root/.huggingface/stored_tokens
