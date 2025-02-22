@@ -5,7 +5,7 @@ from parler_tts import (
 )
 DATA_CACHE_DIR="../_cache/"
 from huggingface_hub import HfApi
-
+import argparse
 import transformers
 from transformers import AutoFeatureExtractor, AutoTokenizer, HfArgumentParser
 from transformers.trainer_pt_utils import LengthGroupedSampler
@@ -21,12 +21,15 @@ if __name__ == "__main__":
         args = parser.parse_args()    
 
         model = ParlerTTSForConditionalGeneration.from_pretrained(
-                model_args.model_name_or_path,
-                cache_dir=(model_args.cache_dir or DATA_CACHE_DIR))
-        tokenizer = AutoTokenizer.from_pretrained("parler-tts/parler_tts_mini_v0.1",
-                                                cache_dir=(model_args.cache_dir or DATA_CACHE_DIR))
+                args.model_name_or_path,
+                cache_dir=(args.cache_dir or DATA_CACHE_DIR))
+        tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path,
+                                                cache_dir=(args.cache_dir or DATA_CACHE_DIR))
+        # tokenizer = AutoTokenizer.from_pretrained("parler-tts/parler_tts_mini-v1",
+        #                                         cache_dir=(args.cache_dir or DATA_CACHE_DIR))
         print(f"Loading model and tokenizer done!")
 
         model.push_to_hub(args.repo_id)
         tokenizer.push_to_hub(args.repo_id)
         print(f"Saving model {args.repo_id} done!")
+
