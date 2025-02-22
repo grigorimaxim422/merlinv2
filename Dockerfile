@@ -31,7 +31,9 @@ RUN huggingface-cli whoami
 
 RUN chmod +x /workspace/dataspeech/*.sh && chmod +x /workspace/parler-tts/*.sh && chmod +x /workspace/rvalidator/*.sh && chmod +x /workspace/*.sh
 
-RUN /workspace/prepare.sh
+WORKDIR /workspace
+
+RUN cd /workspace && ./prepare.sh
 
 CMD ["sh", "-c", "bin/sh"]
 
