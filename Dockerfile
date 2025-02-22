@@ -6,7 +6,7 @@ RUN conda init
 
 RUN apt update && apt upgrade -y && apt install screen speedtest-cli git-lfs  ffmpeg -y && rm -rf /var/lib/apt/lists/*
 
-RUN /usr/sbin/update-ccache-symlinks
+#RUN /usr/sbin/update-ccache-symlinks
 
 COPY . /workspace
 
