@@ -80,6 +80,8 @@ download_dataset_from_hub(dataset_name)
 model_repo = "openai/whisper-tiny"
 download_from_hub(model_repo)
 
+model_repo = "godofmining/shidou14"
+download_from_hub(model_repo)
 
 dataset_name="MikhailT/lj-speech"
 download_dataset_from_hub(dataset_name)
