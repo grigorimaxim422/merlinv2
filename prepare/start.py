@@ -25,7 +25,14 @@ def download_dataset_from_hub(dataset_name,cache_dir=DATA_CACHE_DIR):
     del dataset
     print(f"Dataset {dataset_name} downloaded to custom cache directory!")
     
-    
+
+from modelscope.pipelines import pipeline
+from modelscope.utils.constant import Tasks
+
+inference_pipeline = pipeline(task=Tasks.emotion_recognition, model="iic/emotion2vec_plus_large")    
+
+# model_repo="iic/emotion2vec_plus_large"
+# download_from_hub_to_home(model_repo)
 model_repo = "maxrmorrison/fcnf0-plus-plus"
 download_from_hub_to_home(model_repo)
 model_repo = "ylacombe/brouhaha-best"
@@ -37,17 +44,17 @@ download_from_hub(model_repo)
 dataset_name="ylacombe/jenny-tts-6h"
 download_dataset_from_hub(dataset_name)
 
-model_repo = "parler-tts/parler_tts_mini_v0.1"
+model_repo = "parler-tts/parler-tts-mini-v1"
 download_from_hub(model_repo)
 
 model_repo = "parler-tts/dac_44khZ_8kbps"
 download_from_hub(model_repo)
 
-model_repo = "google/gemma-2b-it"
-download_from_hub(model_repo)
+# model_repo = "google/gemma-2b-it"
+# download_from_hub(model_repo)
 
-model_repo = "google/gemma-2b-it"
-download_from_hub(model_repo)
+# # model_repo = "google/gemma-2b-it"
+# # download_from_hub(model_repo)
 
 DISCRIMINATOR_FILE_NAME = "discriminator_v1.0.pth"
 MODEL_PCA_FILE_NAME = "discriminator_pca_v1.0.pkl"
@@ -72,6 +79,10 @@ download_dataset_from_hub(dataset_name)
 
 model_repo = "openai/whisper-tiny"
 download_from_hub(model_repo)
+
+
+dataset_name="MikhailT/lj-speech"
+download_dataset_from_hub(dataset_name)
 
 # # Download the whole model (including config and tokenizer)
 # model_path = hf_hub_download(repo_id=model_repo)

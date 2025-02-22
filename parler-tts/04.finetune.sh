@@ -1,8 +1,8 @@
  accelerate launch  -m --multi_gpu training.run_parler_tts_training \
-    --model_name_or_path "parler-tts/parler_tts_mini_v0.1" \
+    --model_name_or_path "parler-tts/parler-tts-mini-v1" \
     --feature_extractor_name "parler-tts/dac_44khZ_8kbps" \
-    --description_tokenizer_name "parler-tts/parler_tts_mini_v0.1" \
-    --prompt_tokenizer_name "parler-tts/parler_tts_mini_v0.1" \
+    --description_tokenizer_name "parler-tts/parler-tts-mini-v1" \
+    --prompt_tokenizer_name "parler-tts/parler-tts-mini-v1" \
     --overwrite_output_dir true \
     --train_dataset_name "ylacombe/jenny-tts-6h" \
     --train_metadata_dataset_name "../_cache_datasets" \
