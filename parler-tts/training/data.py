@@ -6,7 +6,7 @@ import datasets
 import numpy as np
 import torch
 from accelerate import Accelerator
-from datasets import Dataset, IterableDataset, concatenate_datasets, interleave_datasets, load_dataset
+from datasets import Dataset, IterableDataset, concatenate_datasets, interleave_datasets, load_dataset,load_from_disk
 from tqdm import tqdm
 from transformers import AutoFeatureExtractor, AutoTokenizer
 
@@ -231,8 +231,12 @@ def load_multiple_datasets(
                     dataset_dict["config"],
                     split=dataset_dict["split"],
                     streaming=streaming,
+                    # format="parquet",
                     **kwargs,
                 )
+                # metadata_dataset = load_from_disk(metadata_dataset_name,
+                #                                   dataset_dict['config']
+                # )
 
                 # TODO(YL): I forgot to create unique ids for MLS english.
                 # To iterate faster, I bypass the original id check and do another one. - Done once because assuming it won't change next time

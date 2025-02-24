@@ -5,7 +5,7 @@ import numpy as np
 
 from scoring.common import EVALUATION_DATASET_SAMPLE_SIZE, MAX_GENERATION_LENGTH, MAX_SEQ_LEN
 from scoring.dataset import StreamedSyntheticDataset
-from scoring.scoring_logic.logic import scoring_workflow
+from scoring.scoring_logic.logicv0 import scoring_workflow, load_whisper_model
 
 import torch
 import torch.nn as nn
@@ -15,7 +15,7 @@ from parler_tts import ParlerTTSForConditionalGeneration
 from modelscope.pipelines import pipeline
 from modelscope.utils.constant import Tasks
 from transformers import AutoTokenizer, WhisperForConditionalGeneration, WhisperProcessor
-
+DATASET_CACHE_DIR = "../_cache"
 
 logger = logging.getLogger(__name__)  # Create a logger for this module
 
@@ -103,8 +103,8 @@ def apply_weights(base_score: float, wer: float) -> float:
 def load_parler_model(repo_namespace, repo_name, device):
     model_name = f"{repo_namespace}/{repo_name}"
     try:
-        model = ParlerTTSForConditionalGeneration.from_pretrained(model_name).to(device)
-        tokenizer = AutoTokenizer.from_pretrained(model_name)
+        model = ParlerTTSForConditionalGeneration.from_pretrained(model_name, cache_dir=DATASET_CACHE_DIR).to(device)
+        tokenizer = AutoTokenizer.from_pretrained(model_name,cache_dir=DATASET_CACHE_DIR)
         logger.info(f"Parler TTS model '{model_name}' and tokenizer loaded successfully.")
         return model, tokenizer
     except Exception as e:
@@ -121,7 +121,7 @@ def load_emotion():
         raise RuntimeError("Emotion2Vector processing failed.")
 
 
-def get_tts_score(request: str) -> dict:
+def get_tts_score(request) -> dict:
     """
     Calculate and return the TTS scores with optional weighting.
 
@@ -138,9 +138,12 @@ def get_tts_score(request: str) -> dict:
     # # Define the weights for scoring, with 'text_length' having a default weight of 1.
     # weights = {"text_length": 1}
 
-    device = "cuda:0" if torch.cuda.is_available() else "cpu"
+    device = "cuda:1" if torch.cuda.is_available() else "cpu"
+    logger.info(f"Device selected for computation: {device}")    
     logger.info(f"Device selected for computation: {device}")
-
+    logger.info(f"Device selected for computation: {device}")
+    
+    processor, whisper_model = load_whisper_model(device)
     model, tokenizer = load_parler_model(request.repo_namespace, request.repo_name, device)
 
     emotion_inference_pipeline = load_emotion()
@@ -149,14 +152,14 @@ def get_tts_score(request: str) -> dict:
     for text, last_user_message, voice_description in data:
         try:
             # Calculate the base score and wer using the scoring workflow function.
-            base_score, wer_score = scoring_workflow(request.repo_namespace, request.repo_name, text, voice_description, device, model, tokenizer, emotion_inference_pipeline)
-
+            base_score, wer_score = scoring_workflow(request.repo_namespace, request.repo_name, text, voice_description, device, model, tokenizer, emotion_inference_pipeline, processor, whisper_model)
+           
             # Extract float values from each tensor in the 'scores' list for further processing
             float_values_from_tensors = [score.item() for score in base_score]
-
+            print(f"--base_score={float_values_from_tensors}, wer_score={wer_score}")
             # Apply weights to the base score based on text properties.
             weighted_score = apply_weights(float_values_from_tensors, wer_score)
-
+            print(f"alpha weight={weighted_score}")
             # Append the weighted score to the scores list.
             scores.append(weighted_score)
 
@@ -174,3 +177,24 @@ def get_tts_score(request: str) -> dict:
 
     # Return the final result dictionary containing the score and any errors.
     return result
+
+
+import argparse
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--repo_namespace", type=str, default="grigorimaxim")    
+    parser.add_argument("--repo_name", type=str, default="parler0220")       
+    
+    #First
+    # parser.add_argument("--repo_namespace", type=str, default="godofmining")
+    # parser.add_argument("--repo_name", type=str, default="shidou14")        
+    
+#    parler-tts/parler-tts-mini-v1
+    # parser.add_argument("--repo_namespace", type=str, default="parler-tts")
+    # parser.add_argument("--repo_name", type=str, default="parler-tts-mini-v1")        
+
+    args = parser.parse_args()
+    score = get_tts_score(args)
+    print("----------------")
+    print(f"score={score}")
+    print("----------------")

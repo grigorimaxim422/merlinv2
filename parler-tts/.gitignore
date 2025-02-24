@@ -11,7 +11,7 @@ __pycache__/
 # logs
 logs/
 
-# Distribution / packaging
+# Distribution /7 packaging
 .Python
 build/
 develop-eggs/
@@ -171,7 +171,8 @@ tags
 .ruff_cache
 
 wandb
-
+tmp_cache/
 tmp_dataset_audio/
 audio_code_tmp/
 output_dir_training/
+_cache/

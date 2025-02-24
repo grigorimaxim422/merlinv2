@@ -330,12 +330,12 @@ def main():
             else config.decoder_start_token_id,
         }
     )
-
+    print(f"loading model:333 {model_args.model_name_or_path}...")
     # create model
     model = ParlerTTSForConditionalGeneration.from_pretrained(
         model_args.model_name_or_path,
         cache_dir=model_args.cache_dir,
-        config=config,
+        config=config,        
         token=data_args.token,
         trust_remote_code=data_args.trust_remote_code,
         attn_implementation={"decoder": model_args.attn_implementation, "text_encoder": "eager"},

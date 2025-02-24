@@ -1,9 +1,12 @@
-from datasets import load_dataset, Audio
+from datasets import load_dataset, Audio, load_from_disk
 from multiprocess import set_start_method
 from dataspeech import rate_apply, pitch_apply, snr_apply, squim_apply
+from utils import save_dataset
 import torch
 import argparse
 
+
+DATA_CACHE_DIR="../_cache/"
 
 if __name__ == "__main__":
     set_start_method("spawn")
@@ -30,9 +33,9 @@ if __name__ == "__main__":
     args = parser.parse_args()
     
     if args.configuration:
-        dataset = load_dataset(args.dataset_name, args.configuration, num_proc=args.cpu_num_workers,)
+        dataset = load_dataset(args.dataset_name, args.configuration, num_proc=args.cpu_num_workers, cache_dir=DATA_CACHE_DIR)
     else:
-        dataset = load_dataset(args.dataset_name, num_proc=args.cpu_num_workers,)
+        dataset = load_dataset(args.dataset_name, num_proc=args.cpu_num_workers,cache_dir=DATA_CACHE_DIR)
         
     audio_column_name = "audio" if args.rename_column else args.audio_column_name
     text_column_name = "text" if args.rename_column else args.text_column_name
@@ -103,11 +106,14 @@ if __name__ == "__main__":
     
     if args.output_dir:
         print("Saving to disk...")
-        dataset.save_to_disk(args.output_dir)
-    if args.repo_id:
-        print("Pushing to the hub...")
-        if args.configuration:
-            dataset.push_to_hub(args.repo_id, args.configuration)
-        else:
-            dataset.push_to_hub(args.repo_id)
+        # save_dataset(dataset, args.output_dir)
+        for split in dataset.keys():
+            save_dataset(dataset[split], args.output_dir, split)
+        #     dataset[split].to_parquet(f"{args.output_dir}/{split}.parquet")
+    # if args.repo_id:
+    #     print("Pushing to the hub...")
+    #     if args.configuration:
+    #         dataset.push_to_hub(args.repo_id, args.configuration)
+    #     else:
+    #         dataset.push_to_hub(args.repo_id)
     

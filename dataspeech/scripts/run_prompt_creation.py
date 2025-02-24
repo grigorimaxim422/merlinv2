@@ -12,7 +12,7 @@ import numpy as np
 import torch
 from accelerate import Accelerator, skip_first_batches
 from accelerate.logging import get_logger
-from datasets import DatasetDict, load_dataset
+from datasets import DatasetDict, load_dataset, load_from_disk
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 from transformers import (
@@ -23,7 +23,9 @@ from transformers import (
 )
 from datetime import timedelta
 from accelerate import InitProcessGroupKwargs
+from utils import save_dataset
 
+DATA_CACHE_DIR="../_cache/"
 
 logger = get_logger(__name__, log_level="INFO")
 
@@ -49,7 +51,7 @@ class ModelArguments:
         metadata={"help": "The specific model version to use (can be a branch name, tag name or commit id)."},
     )
     cache_dir: Optional[str] = field(
-        default=None,
+        default="../_cache/",
         metadata={"help": "Where to store the pretrained models downloaded from huggingface.co"},
     )
     torch_dtype: Optional[str] = field(
@@ -421,6 +423,10 @@ def main():
     else:
         model_args, data_args = parser.parse_args_into_dataclasses()
 
+    print("-------------------------")
+    print(f"model_args={model_args}")
+    print("-------------------------")
+    print(f"data_args={data_args}")
     # 2. Setup logging
     # Make one log on every process with the configuration for debugging.
     logging.basicConfig(
@@ -452,23 +458,32 @@ def main():
         # load on a split-wise basis
         for split in data_splits:
             with accelerator.local_main_process_first():
+                # raw_datasets[split] = load_from_disk(data_args.dataset_name,
+                #     data_args.dataset_config_name,
+                #     split=split,                    
+                #     token=model_args.token,
+                #     num_proc=data_args.preprocessing_num_workers)
                 raw_datasets[split] = load_dataset(
                     data_args.dataset_name,
                     data_args.dataset_config_name,
                     split=split,
                     cache_dir=model_args.cache_dir,
                     token=model_args.token,
-                    num_proc=data_args.preprocessing_num_workers,
+                    num_proc=data_args.preprocessing_num_workers
                 )
     else:
         with accelerator.local_main_process_first():
             # load all splits for annotation
+            # raw_datasets = load_from_disk(data_args.dataset_name,
+            #     data_args.dataset_config_name)                
+                
             raw_datasets = load_dataset(
                 data_args.dataset_name,
                 data_args.dataset_config_name,
                 cache_dir=model_args.cache_dir,
                 token=model_args.token,
-                num_proc=data_args.preprocessing_num_workers,
+                num_proc=data_args.preprocessing_num_workers
+                
             )
 
     raw_datasets_features = set(raw_datasets[next(iter(raw_datasets))].features.keys())
@@ -519,7 +534,8 @@ def main():
         device_map=get_kbit_device_map() if quantization_config is not None else None,
         quantization_config=quantization_config,
         low_cpu_mem_usage=True,
-        token=model_args.token,
+        token=model_args.token,    
+        cache_dir=model_args.cache_dir
     ).eval()
 
     if model_args.torch_compile:
@@ -539,6 +555,7 @@ def main():
         trust_remote_code=model_args.trust_remote_code,
         use_fast=model_args.use_fast_tokenizer,
         padding_side="left",
+        cache_dir=model_args.cache_dir
     )
     if tokenizer.pad_token_id is None:
         tokenizer.pad_token_id = tokenizer.bos_token_id
@@ -653,13 +670,16 @@ def main():
         accelerator.wait_for_everyone()
 
     if accelerator.is_main_process:
-        vectorized_datasets.save_to_disk(data_args.output_dir)
-        if data_args.push_to_hub:
-            vectorized_datasets.push_to_hub(
-                data_args.hub_dataset_id,
-                config_name=data_args.dataset_config_name if data_args.dataset_config_name is not None else "default",
-                token=model_args.token,
-            )
+        for split in vectorized_datasets:
+            save_dataset(vectorized_datasets[split], data_args.output_dir, split)
+        # vectorized_datasets.save_to_disk(data_args.output_dir)
+
+        # if data_args.push_to_hub:
+        #     vectorized_datasets.push_to_hub(
+        #         data_args.hub_dataset_id,
+        #         config_name=data_args.dataset_config_name if data_args.dataset_config_name is not None else "default",
+        #         token=model_args.token,
+        #     )
     accelerator.wait_for_everyone()
     accelerator.end_training()
 

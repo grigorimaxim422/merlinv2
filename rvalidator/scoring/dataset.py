@@ -8,7 +8,7 @@ from torch.utils.data import Dataset
 import tiktoken
 
 
-DATASET_CACHE_DIR = "evalsets"
+DATASET_CACHE_DIR = "../_cache"
 hf_token = os.environ.get("HF_TOKEN")
 
 
@@ -32,24 +32,29 @@ DATASET_URL = "https://sn58-dataset.dippy-bittensor-subnet.com/dataset"
 DATASET_API_KEY = "someVerysecretKey"
 
 # Authentication
-VOICES_URL = "https://sn58-dataset.dippy-bittensor-subnet.com"
+# VOICES_URL = "https://sn58-dataset.dippy-bittensor-subnet.com"
+
 USERNAME = os.getenv("VASPI_USERNAME")
 PASSWORD = os.getenv("VASPI_PASSWORD")
 
 
 def get_latest_from_set():
-    start_date = "20250201"
-    end_date = "20250204"
-    url = f"{VOICES_URL}/voices?start_date={start_date}&end_date={end_date}"
-   
-    # Send GET request with Basic Authentication
-    response = requests.get(
-        url,
-    )
-    response.raise_for_status()  # Raise an error for bad responses
-    data = response.json().get("all_convos", [])
-
+    with open("cache/response.json", "r") as file:
+        data = json.load(file)
+        
     return data
+    # start_date = "20250201"
+    # end_date = "20250204"
+    # url = f"{VOICES_URL}/voices?start_date={start_date}&end_date={end_date}"
+   
+    # # Send GET request with Basic Authentication
+    # response = requests.get(
+    #     url,
+    # )
+    # response.raise_for_status()  # Raise an error for bad responses
+    # data = response.json().get("all_convos", [])
+    # print(f"get_latest_from_set={data.keys()}")
+    # return data
 
 
 def get_latest_from_file(filter: str = "both", filename: str = "/tmp/dataset.json"):

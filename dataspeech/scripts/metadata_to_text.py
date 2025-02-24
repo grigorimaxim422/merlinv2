@@ -1,12 +1,13 @@
 import numpy as np
 import pandas as pd
-from datasets import load_dataset, DatasetDict
+from datasets import load_dataset, DatasetDict, load_from_disk
 from multiprocess import set_start_method
 import argparse
 from pathlib import Path
 import os
 import matplotlib.pyplot as plt
 import json
+from utils import save_dataset
 
 SPEAKER_RATE_BINS = ["very slowly", "quite slowly", "slightly slowly", "moderate speed", "slightly fast", "quite fast", "very fast"]
 SNR_BINS = ["very noisy", "quite noisy", "slightly noisy", "moderate ambient sound", "slightly clear", "quite clear", "very clear"]
@@ -14,6 +15,8 @@ REVERBERATION_BINS = ["very roomy sounding", "quite roomy sounding", "slightly r
 UTTERANCE_LEVEL_STD = ["very monotone", "quite monotone", "slightly monotone", "moderate intonation", "slightly expressive", "quite expressive", "very expressive"]
 SI_SDR_BINS = ["extremely noisy", "very noisy", "noisy", "slightly noisy", "almost no noise", "very clear"]
 PESQ_BINS = ["very bad speech quality", "bad speech quality", "slightly bad speech quality", "moderate speech quality", "great speech quality", "wonderful speech quality"]
+
+DATA_CACHE_DIR="_cache/"
 
 # this one is supposed to be apply to speaker-level mean pitch, and relative to gender
 SPEAKER_LEVEL_PITCH_BINS = ["very low pitch", "quite low pitch", "slightly low pitch", "moderate pitch", "slightly high pitch", "quite high pitch", "very high pitch"]
@@ -235,9 +238,11 @@ if __name__ == "__main__":
             dataset = []
             for dataset_name, dataset_config in zip(dataset_names, dataset_configs):
                 tmp_dataset = load_dataset(dataset_name, dataset_config, num_proc=args.cpu_num_workers)
+                # tmp_datset = load_from_disk(dataset_name, dataset_config, num_proc=args.cpu_num_workers)
                 dataset.append(tmp_dataset)
         else:
             dataset = [load_dataset(args.dataset_name, args.configuration, num_proc=args.cpu_num_workers)]
+            # dataset = [load_from_disk(args.dataset_name, args.configuration)]
             dataset_configs = [args.configuration]
     else:
         if "+" in args.dataset_name:
@@ -254,11 +259,13 @@ if __name__ == "__main__":
             
             dataset = []
             for dataset_name, dataset_config in zip(dataset_names):
-                tmp_dataset = load_dataset(dataset_name, num_proc=args.cpu_num_workers)
+                tmp_dataset = load_dataset(dataset_name, num_proc=args.cpu_num_workers,format='parquet')
+                # tmp_dataset = load_from_disk(dataset_name, num_proc=args.cpu_num_workers)
                 dataset.append(tmp_dataset)
 
         else:
-            dataset = [load_dataset(args.dataset_name, num_proc=args.cpu_num_workers)]
+            dataset = [load_dataset(args.dataset_name, num_proc=args.cpu_num_workers,format='parquet')]
+            # dataset = [load_from_disk(args.dataset_name, num_proc=args.cpu_num_workers)]
 
     if args.plot_directory:
         Path(args.plot_directory).mkdir(parents=True, exist_ok=True)
@@ -298,11 +305,19 @@ if __name__ == "__main__":
         
     if not args.only_save_plot:
         if args.output_dir:
-            for output_dir, df in zip(output_dirs, dataset):
-                df.save_to_disk(output_dir)
-        if args.repo_id:
-            for i, (repo_id, df) in enumerate(zip(repo_ids, dataset)):
-                if args.configuration:
-                    df.push_to_hub(repo_id, dataset_configs[i])
-                else:
-                    df.push_to_hub(repo_id)
+            # for i, (df) in enumerate(zip(dataset)):
+            for df in dataset:
+                print(df)
+                for split in df.keys():
+                    
+                    save_dataset(df[split], args.output_dir, split)                
+                
+            # for output_dir, df in zip(output_dirs, dataset):
+            #     save_dataset(dataset_configs[i],)
+                # df.to_parquet(output_dir)
+        # if args.repo_id:
+        #     for i, (repo_id, df) in enumerate(zip(repo_ids, dataset)):
+        #         if args.configuration:
+        #             df.push_to_hub(repo_id, dataset_configs[i])
+        #         else:
+        #             df.push_to_hub(repo_id)

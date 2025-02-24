@@ -7,12 +7,12 @@ import numpy as np
 
 model = None
 ratio = 16000/270
-
+DATA_CACHE_DIR="../_cache/"
 def snr_apply(batch, rank=None, audio_column_name="audio", batch_size=32):
     global model
     if model is None:
         model = Model.from_pretrained(
-            Path(hf_hub_download(repo_id="ylacombe/brouhaha-best", filename="best.ckpt")),
+            Path(hf_hub_download(repo_id="ylacombe/brouhaha-best", filename="best.ckpt",cache_dir=DATA_CACHE_DIR)),
             strict=False,
         )
     if rank is not None or torch.cuda.device_count() > 0:

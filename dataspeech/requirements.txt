@@ -6,3 +6,5 @@ demucs
 transformers
 accelerate
 bitsandbytes
+numpy<2.0
+flash-attn

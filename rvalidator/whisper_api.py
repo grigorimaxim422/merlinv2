@@ -4,14 +4,14 @@ from transformers import WhisperProcessor, WhisperForConditionalGeneration
 from pydantic import BaseModel
 import io
 
-DATASET_CACHE_DIR = "evalsets"
+DATASET_CACHE_DIR = "../_cache"
 
 # Initialize FastAPI app
 app = FastAPI()
 
 # Load the Whisper model and processor from Hugging Face
-model = WhisperForConditionalGeneration.from_pretrained("openai/whisper-small.en", cache_dir=DATASET_CACHE_DIR)
-processor = WhisperProcessor.from_pretrained("openai/whisper-small.en", cache_dir=DATASET_CACHE_DIR)
+model = WhisperForConditionalGeneration.from_pretrained("openai/whisper-tiny", cache_dir=DATASET_CACHE_DIR)
+processor = WhisperProcessor.from_pretrained("openai/whisper-tiny", cache_dir=DATASET_CACHE_DIR)
 
 # API to transcribe audio
 @app.post("/transcribe/")

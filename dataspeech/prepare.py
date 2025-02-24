@@ -3,6 +3,15 @@ from multiprocess import set_start_method
 from dataspeech import rate_apply, pitch_apply, snr_apply, squim_apply
 import torch
 import argparse
+from transformers import (
+    AutoModelForCausalLM,
+    AutoTokenizer,
+)
+from pyannote.audio import Model
+from pathlib import Path
+from huggingface_hub import hf_hub_download
+
+DATA_CACHE_DIR="../_cache/"
 
 if __name__ == "__main__":
     set_start_method("spawn")
@@ -10,6 +19,7 @@ if __name__ == "__main__":
     
     
     parser.add_argument("dataset_name", type=str, help="Path or name of the dataset. See: https://huggingface.co/docs/datasets/v2.17.0/en/package_reference/loading_methods#datasets.load_dataset.path")
+    parser.add_argument("--model_name_or_path", type=str, help="Path or name of the dataset. See: https://huggingface.co/docs/datasets/v2.17.0/en/package_reference/loading_methods#datasets.load_dataset.path")
     parser.add_argument("--configuration", default=None, type=str, help="Dataset configuration to use, if necessary.")
     parser.add_argument("--output_dir", default=None, type=str, help="If specified, save the dataset on disk with this path.")
     parser.add_argument("--repo_id", default=None, type=str, help="If specified, push the dataset to the hub.")
@@ -24,14 +34,30 @@ if __name__ == "__main__":
     parser.add_argument("--num_workers_per_gpu_for_snr", default=1, type=int, help="Number of workers per GPU for the SNR and reverberation estimation if GPUs are available. Defaults to 1 if some are avaiable. Useful if you want multiple processes per GPUs to maximise GPU usage.")
     parser.add_argument("--apply_squim_quality_estimation", action="store_true", help="If set, will also use torchaudio-squim estimation (SI-SNR, STOI and PESQ).")
     parser.add_argument("--num_workers_per_gpu_for_squim", default=1, type=int, help="Number of workers per GPU for the SI-SNR, STOI and PESQ estimation if GPUs are available. Defaults to 1 if some are avaiable. Useful if you want multiple processes per GPUs to maximise GPU usage.")
-
+    
 
     args = parser.parse_args()
+    if args.dataset_name:    
+        dataset = load_dataset(args.dataset_name, num_proc=args.cpu_num_workers, cache_dir=DATA_CACHE_DIR)
     
-    if args.configuration:
-        dataset = load_dataset(args.dataset_name, args.configuration, num_proc=args.cpu_num_workers,)
-    else:
-        dataset = load_dataset(args.dataset_name, num_proc=args.cpu_num_workers,)
+        print(f"Dataset {args.dataset_name} loaded")
+        del dataset
     
-    print(f"Dataset {args.dataset_name} loaded")
-    del dataset
+    if args.model_name_or_path:
+        model = AutoModelForCausalLM.from_pretrained(
+            args.model_name_or_path,
+            cache_dir=DATA_CACHE_DIR)
+        
+        tokenizer = AutoTokenizer.from_pretrained(
+            args.model_name_or_path,
+            cache_dir=DATA_CACHE_DIR)
+        
+        del model
+        del tokenizer
+        print(f"LM model and tokenizer loaded! {args.model_name_or_path}")
+        
+    model = Model.from_pretrained(
+            Path(hf_hub_download(repo_id="ylacombe/brouhaha-best", filename="best.ckpt", cache_dir=DATA_CACHE_DIR)),
+            strict=False,
+        )
+    print(f"ylacombe/brouhaha-best pulled down!")

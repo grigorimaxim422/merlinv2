@@ -1,17 +1,17 @@
  accelerate launch  -m --multi_gpu training.run_parler_tts_training \
-    --model_name_or_path "parler-tts/parler_tts_mini_v0.1" \
+    --model_name_or_path "parler-tts/parler-tts-mini-v1" \
     --feature_extractor_name "parler-tts/dac_44khZ_8kbps" \
-    --description_tokenizer_name "parler-tts/parler_tts_mini_v0.1" \
-    --prompt_tokenizer_name "parler-tts/parler_tts_mini_v0.1" \
+    --description_tokenizer_name "parler-tts/parler-tts-mini-v1" \
+    --prompt_tokenizer_name "parler-tts/parler-tts-mini-v1" \
     --overwrite_output_dir true \
     --train_dataset_name "ylacombe/jenny-tts-6h" \
-    --train_metadata_dataset_name "grigorimaxim/jenny-tts-6h-tagged" \
+    --train_metadata_dataset_name "../_cache_datasets" \
     --train_dataset_config_name "default" \
     --train_split_name "train" \
     --eval_dataset_name "ylacombe/jenny-tts-6h" \
-    --eval_metadata_dataset_name "grigorimaxim/jenny-tts-6h-tagged" \
+    --eval_metadata_dataset_name "../_cache_datasets" \
     --eval_dataset_config_name "default" \
-    --cache_dir "tmp_cache" \
+    --cache_dir "../_cache" \
     --eval_split_name "train" \
     --max_eval_samples 8 \
     --per_device_eval_batch_size 8 \
@@ -38,9 +38,9 @@
     --audio_encoder_per_device_batch_size 4 \
     --dtype "float16" \
     --seed 456 \
-    --output_dir "./output_dir_training/" \
-    --temporary_save_to_disk "./audio_code_tmp/" \
-    --save_to_disk "./tmp_dataset_audio/" \
+    --output_dir "../output_dir_training/" \
+    --temporary_save_to_disk "../audio_code_tmp/" \
+    --save_to_disk "../tmp_dataset_audio/" \
     --dataloader_num_workers 2 \
     --do_eval \
     --predict_with_generate \
