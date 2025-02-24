@@ -1,4 +1,4 @@
-## Prepare Envrionment
+## Envrionment
 
 [Colab] https://colab.research.google.com/github/ylacombe/scripts_and_notebooks/blob/main/Finetuning_Parler_TTS_on_a_single_speaker_dataset.ipynb#scrollTo=LKwAePwUcl8u
 
