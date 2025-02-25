@@ -22,10 +22,10 @@ python ./scripts/run_prompt_creation.py \
   --speaker_name "Jenny" \
   --is_single_speaker \
   --dataset_name "_cache_tags_bin" \
-  --output_dir "./_cache_datasets" \
+  --output_dir "../_cache_datasets" \
   --dataset_config_name "default" \
   --model_name_or_path "google/gemma-2b-it" \
-  --cache_dir "./_cache" \
+  --cache_dir "../_cache" \
   --per_device_eval_batch_size 12 \
   --attn_implementation "sdpa" \
   --dataloader_num_workers 2 \
@@ -41,13 +41,13 @@ cd parler-tts
     --prompt_tokenizer_name "parler-tts/parler-tts-mini-v1" \
     --overwrite_output_dir true \
     --train_dataset_name "ylacombe/jenny-tts-6h" \
-    --train_metadata_dataset_name "./_cache_datasets" \
+    --train_metadata_dataset_name "../_cache_datasets" \
     --train_dataset_config_name "default" \
     --train_split_name "train" \
     --eval_dataset_name "ylacombe/jenny-tts-6h" \
-    --eval_metadata_dataset_name "./_cache_datasets" \
+    --eval_metadata_dataset_name "../_cache_datasets" \
     --eval_dataset_config_name "default" \
-    --cache_dir "./_cache" \
+    --cache_dir "../_cache" \
     --eval_split_name "train" \
     --max_eval_samples 8 \
     --per_device_eval_batch_size 8 \
@@ -74,18 +74,18 @@ cd parler-tts
     --audio_encoder_per_device_batch_size 4 \
     --dtype "float16" \
     --seed 456 \
-    --output_dir "../r225_joker_jen6/" \
-    --temporary_save_to_disk "./audio_code_tmp/" \
-    --save_to_disk "./tmp_dataset_audio/" \
+    --output_dir "./r225_joker_jen6/" \
+    --temporary_save_to_disk "../audio_code_tmp/" \
+    --save_to_disk "../tmp_dataset_audio/" \
     --dataloader_num_workers 2 \
     --do_eval \
     --predict_with_generate \
     --include_inputs_for_metrics \
     --group_by_length true
 
-cd ..
+# cd ..
 
-python3 parler-tts/push_to_hub.py \
+python3 push_to_hub.py \
     --model_name_or_path "./r225_joker_jen6" \
-    --cache_dir "./_cache" \
+    --cache_dir "../_cache" \
     --repo_id "r225_joker_jen6"
