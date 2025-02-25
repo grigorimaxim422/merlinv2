@@ -83,8 +83,11 @@ download_from_hub(model_repo)
 model_repo = "godofmining/shidou14"
 download_from_hub(model_repo)
 
-dataset_name="MikhailT/lj-speech"
-download_dataset_from_hub(dataset_name)
+model_repo = "JokerJokerJoker/plr64"
+download_from_hub(model_repo)
+
+# dataset_name="MikhailT/lj-speech"
+# download_dataset_from_hub(dataset_name)
 
 # # Download the whole model (including config and tokenizer)
 # model_path = hf_hub_download(repo_id=model_repo)
