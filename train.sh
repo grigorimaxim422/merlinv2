@@ -16,7 +16,6 @@ python ./scripts/metadata_to_text.py \
     --avoid_pitch_computation \
     --output_dir "_cache_tags_bin"
 #    --repo_id "jenny-tts-tags-6h" \
-    
 
 python ./scripts/run_prompt_creation.py \
   --speaker_name "Jenny" \
@@ -35,7 +34,7 @@ cd ..
 cd parler-tts
 
  accelerate launch  -m --multi_gpu training.run_parler_tts_training \
-    --model_name_or_path "JokerJokerJoker/plr64" \
+    --model_name_or_path "godofmining/shidou14" \
     --feature_extractor_name "parler-tts/dac_44khZ_8kbps" \
     --description_tokenizer_name "parler-tts/parler-tts-mini-v1" \
     --prompt_tokenizer_name "parler-tts/parler-tts-mini-v1" \
@@ -82,6 +81,9 @@ cd parler-tts
     --predict_with_generate \
     --include_inputs_for_metrics \
     --group_by_length true
+
+rm -rf parler-speech/r225_joker_jen6
+rm -rf    parler-speech/*checkpoint*
 
 # cd ..
 
