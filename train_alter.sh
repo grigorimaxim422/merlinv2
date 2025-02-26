@@ -9,13 +9,13 @@ accelerate launch ./training/run_parler_tts_training.py \
     --train_dataset_name "parler-tts/libritts_r_filtered" \
     --train_metadata_dataset_name "parler-tts/libritts-r-filtered-speaker-descriptions" \
     --train_dataset_config_name "clean" \
-    --train_split_name "train.clean.360" \
+    --train_split_name "train.clean.100" \
     --eval_dataset_name "parler-tts/libritts_r_filtered" \
     --eval_metadata_dataset_name "parler-tts/libritts-r-filtered-speaker-descriptions" \
     --eval_dataset_config_name "other" \
     --eval_split_name "test.other" \
     --target_audio_column_name "audio" \
-    --description_column_name "text_description" \
+    --description_column_name "text_normalized" \
     --prompt_column_name "text" \
     --max_duration_in_seconds 30 \
     --min_duration_in_seconds 2.0 \
