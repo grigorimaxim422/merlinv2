@@ -18,9 +18,9 @@ from transformers import AutoTokenizer, WhisperForConditionalGeneration, Whisper
 
 logger = logging.getLogger(__name__)  # Create a logger for this module
 DATASET_CACHE_DIR = "../_cache"
-def _prepare_tts_score():
-    inference_pipeline = pipeline(task=Tasks.emotion_recognition, model="iic/emotion2vec_plus_large")    
-    # model = ParlerTTSForConditionalGeneration.from_pretrained(model_name)
+# def _prepare_tts_score():
+#     inference_pipeline = pipeline(task=Tasks.emotion_recognition, model="iic/emotion2vec_plus_large")    
+#     # model = ParlerTTSForConditionalGeneration.from_pretrained(model_name)
     
 
 def load_dataset():
