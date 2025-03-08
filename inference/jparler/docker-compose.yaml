@@ -1,0 +1,23 @@
+version: "3.8"
+
+services:
+  # vllmのコンテナ
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: japanese-parler-tts-server
+    container_name: japanese-parler-tts-server
+    command: ["/bin/sh", "-c", "uvicorn server.main:app --host 0.0.0.0 --port 8000 --reload"]
+    volumes:
+      - .cache:/root/.cache/huggingface
+      - ./:/app
+    ports:
+      - 8000:8000
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]

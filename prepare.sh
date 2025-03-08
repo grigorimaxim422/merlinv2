@@ -1,1 +1,1 @@
-python3 prepare/start.py
+python3 prepare.py
