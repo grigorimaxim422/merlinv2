@@ -467,7 +467,7 @@ def main():
                     data_args.dataset_name,
                     data_args.dataset_config_name,
                     split=split,
-                    cache_dir=model_args.cache_dir,
+                    # cache_dir=model_args.cache_dir,
                     token=model_args.token,
                     num_proc=data_args.preprocessing_num_workers
                 )
@@ -480,7 +480,7 @@ def main():
             raw_datasets = load_dataset(
                 data_args.dataset_name,
                 data_args.dataset_config_name,
-                cache_dir=model_args.cache_dir,
+                # cache_dir=model_args.cache_dir,
                 token=model_args.token,
                 num_proc=data_args.preprocessing_num_workers
                 
