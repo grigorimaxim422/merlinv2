@@ -34,7 +34,7 @@ cd ..
 cd parler-tts
 
  accelerate launch  -m --multi_gpu training.run_parler_tts_training \
-    --model_name_or_path "godofmining/shidou14" \
+    --model_name_or_path "Legalaz/llabo_01_13_08_25" \
     --feature_extractor_name "parler-tts/dac_44khZ_8kbps" \
     --description_tokenizer_name "parler-tts/parler-tts-mini-v1" \
     --prompt_tokenizer_name "parler-tts/parler-tts-mini-v1" \
@@ -73,7 +73,7 @@ cd parler-tts
     --audio_encoder_per_device_batch_size 4 \
     --dtype "float16" \
     --seed 456 \
-    --output_dir "./r225_joker_jen6/" \
+    --output_dir "./r310_lab_jen6/" \
     --temporary_save_to_disk "../audio_code_tmp/" \
     --save_to_disk "../tmp_dataset_audio/" \
     --dataloader_num_workers 2 \
@@ -82,12 +82,12 @@ cd parler-tts
     --include_inputs_for_metrics \
     --group_by_length true
 
-rm -rf parler-speech/r225_joker_jen6
+rm -rf parler-speech/r310_lab_jen6
 rm -rf    parler-speech/*checkpoint*
 
 # cd ..
 
 python3 push_to_hub.py \
-    --model_name_or_path "./r225_joker_jen6" \
+    --model_name_or_path "./r310_lab_jen6" \
     --cache_dir "../_cache" \
-    --repo_id "r225_joker_jen6"
+    --repo_id "r310_lab_jen6"

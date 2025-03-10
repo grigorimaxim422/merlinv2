@@ -44,8 +44,8 @@ download_from_hub(model_repo)
 dataset_name="ylacombe/jenny-tts-6h"
 download_dataset_from_hub(dataset_name)
 
-dataset_name="reach-vb/jenny_tts_dataset"
-download_dataset_from_hub(dataset_name)
+# dataset_name="reach-vb/jenny_tts_dataset"
+# download_dataset_from_hub(dataset_name)
 
 model_repo = "parler-tts/parler-tts-mini-v1"
 download_from_hub(model_repo)
@@ -86,7 +86,7 @@ model_repo = "openai/whisper-tiny"
 download_from_hub(model_repo)
 
 #model_repo = "godofmining/shidou14"
-model_repo = "gold2248/speech-v2-07"
+model_repo = "Legalaz/llabo_01_13_08_25"
 download_from_hub(model_repo)
 
 # model_repo = "JokerJokerJoker/plr64"

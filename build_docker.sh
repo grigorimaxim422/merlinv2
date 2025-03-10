@@ -1,7 +1,7 @@
 #!/bin/bash
 
 VERSION=$1  # Pass version as an argument
-REPO="grigorimaxim/parler58"  # Change this to your repository
+REPO="grigorimaxim/merlin_tts"  # Change this to your repository
 
 if [ -z "$VERSION" ]; then
   echo "Usage: $0 <version>"
@@ -12,7 +12,9 @@ fi
 docker build -t $REPO:$VERSION .
 docker push $REPO:$VERSION
 
+
 docker save $REPO:$VERSION | gzip > parler58.tar.gz
+echo "Saved into parler58.tar.gz"
 
 # Optionally tag as latest
 docker tag $REPO:$VERSION $REPO:latest
@@ -21,7 +23,7 @@ docker push $REPO:latest
 echo "Image $REPO:$VERSION pushed successfully!"
 
 echo "Prepare uploading big file to hub..."
-huggingface-cli repo create parler58
+#huggingface-cli repo create parler58
 
 git lfs install
 huggingface-cli upload grigorimaxim/merlin_tts ./parler58.tar.gz
