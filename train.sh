@@ -34,7 +34,7 @@ cd ..
 cd parler-tts
 
  accelerate launch  -m --multi_gpu training.run_parler_tts_training \
-    --model_name_or_path "Legalaz/llabo_01_13_08_25" \
+    --model_name_or_path "JokerJokerJoker/plr54" \
     --feature_extractor_name "parler-tts/dac_44khZ_8kbps" \
     --description_tokenizer_name "parler-tts/parler-tts-mini-v1" \
     --prompt_tokenizer_name "parler-tts/parler-tts-mini-v1" \
@@ -58,11 +58,11 @@ cd parler-tts
     --max_text_length 400 \
     --preprocessing_num_workers 2 \
     --do_train true \
-    --num_train_epochs 2 \
-    --gradient_accumulation_steps 18 \
+    --num_train_epochs 1 \
+    --gradient_accumulation_steps 6 \
     --gradient_checkpointing true \
     --per_device_train_batch_size 2 \
-    --learning_rate 0.00008 \
+    --learning_rate 0.00095 \
     --adam_beta1 0.9 \
     --adam_beta2 0.99 \
     --weight_decay 0.01 \
@@ -73,7 +73,7 @@ cd parler-tts
     --audio_encoder_per_device_batch_size 4 \
     --dtype "float16" \
     --seed 456 \
-    --output_dir "./r310_lab_jen6/" \
+    --output_dir "./r310_joker_jenn6/" \
     --temporary_save_to_disk "../audio_code_tmp/" \
     --save_to_disk "../tmp_dataset_audio/" \
     --dataloader_num_workers 2 \
@@ -82,12 +82,12 @@ cd parler-tts
     --include_inputs_for_metrics \
     --group_by_length true
 
-rm -rf parler-speech/r310_lab_jen6
+rm -rf parler-speech/r310_joker_jenn6
 rm -rf    parler-speech/*checkpoint*
 
 # cd ..
 
 python3 push_to_hub.py \
-    --model_name_or_path "./r310_lab_jen6" \
+    --model_name_or_path "./r310_joker_jenn6" \
     --cache_dir "../_cache" \
-    --repo_id "r310_lab_jen6"
+    --repo_id "r310_joker_jenn6"

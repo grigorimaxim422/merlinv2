@@ -23,7 +23,7 @@ python ./scripts/run_prompt_creation.py \
   --dataset_name "_cache_tags_bin" \
   --output_dir "../_cache_datasets" \
   --dataset_config_name "default" \
-  --model_name_or_path "google/gemma-7b-it" \
+  --model_name_or_path "google/gemma-2b-it" \
   --cache_dir "../_cache" \
   --per_device_eval_batch_size 12 \
   --attn_implementation "flash_attention_2" \
@@ -34,10 +34,10 @@ cd ..
 cd parler-tts
 
  accelerate launch  -m --multi_gpu training.run_parler_tts_training \
-    --model_name_or_path "Kromtao/KROMme_13_Voice_roflzvinp" \
+    --model_name_or_path "slotomatos/8-slot-58-28011222" \
     --feature_extractor_name "parler-tts/dac_44khZ_8kbps" \
-    --description_tokenizer_name "parler-tts/parler-tts-mini-v1" \
-    --prompt_tokenizer_name "parler-tts/parler-tts-mini-v1" \
+    --description_tokenizer_name "slotomatos/8-slot-58-28011222" \
+    --prompt_tokenizer_name "slotomatos/8-slot-58-28011222" \
     --overwrite_output_dir true \
     --train_dataset_name "ylacombe/jenny-tts-6h" \
     --train_metadata_dataset_name "../_cache_datasets" \
@@ -58,7 +58,7 @@ cd parler-tts
     --max_text_length 600 \
     --preprocessing_num_workers 2 \
     --do_train true \
-    --num_train_epochs 4 \
+    --num_train_epochs 16 \
     --gradient_accumulation_steps 6 \
     --gradient_checkpointing true \
     --per_device_train_batch_size 4 \
@@ -73,7 +73,7 @@ cd parler-tts
     --audio_encoder_per_device_batch_size 4 \
     --dtype "float16" \
     --seed 456 \
-    --output_dir "./r310_kr_jen6/" \
+    --output_dir "./r310_sl_jen6/" \
     --temporary_save_to_disk "../audio_code_tmp/" \
     --save_to_disk "../tmp_dataset_audio/" \
     --dataloader_num_workers 2 \
@@ -82,12 +82,12 @@ cd parler-tts
     --include_inputs_for_metrics \
     --group_by_length true
 
-rm -rf parler-speech/r310_kr_jen6
+rm -rf parler-speech/r310_sl_jen6
 rm -rf    parler-speech/*checkpoint*
 
 # cd ..
 
 python3 push_to_hub.py \
-    --model_name_or_path "./r310_kr_jen6" \
+    --model_name_or_path "./r310_sl_jen6" \
     --cache_dir "../_cache" \
-    --repo_id "r310_kr_jen6"
+    --repo_id "r310_sl_jen6"
