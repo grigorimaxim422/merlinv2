@@ -6,7 +6,6 @@ accelerate launch ./training/run_parler_tts_training.py \
     --feature_extractor_name "parler-tts/dac_44khZ_8kbps" \
     --description_tokenizer_name "parler-tts/parler-tts-mini-v1" \
     --prompt_tokenizer_name "parler-tts/parler-tts-mini-v1" \
-    --report_to "wandb" \
     --overwrite_output_dir true \
     --train_dataset_name "parler-tts/libritts_r_filtered" \
     --train_metadata_dataset_name "parler-tts/libritts-r-filtered-speaker-descriptions" \
@@ -22,7 +21,6 @@ accelerate launch ./training/run_parler_tts_training.py \
     --max_duration_in_seconds 30 \
     --min_duration_in_seconds 2.0 \
     --max_text_length 600 \
-    --add_audio_samples_to_wandb true \
     --id_column_name "id" \
     --preprocessing_num_workers 8 \
     --do_train true \
