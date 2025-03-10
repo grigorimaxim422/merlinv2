@@ -48,7 +48,7 @@ accelerate launch ./training/run_parler_tts_training.py \
     --audio_encoder_per_device_batch_size 24 \
     --dtype "bfloat16" \
     --seed 456 \
-    --output_dir "./r308_gold_librs/" \
+    --output_dir "./r310_kr_librs/" \
     --temporary_save_to_disk "../audio_code_tmp/" \
     --save_to_disk "../tmp_dataset_audio/" \
     --max_eval_samples 96 \
@@ -56,15 +56,15 @@ accelerate launch ./training/run_parler_tts_training.py \
     --group_by_length true \
     --attn_implementation "sdpa"
 
-rm -rf parler-speech/r308_gold_librs
+rm -rf parler-speech/r310_kr_librs
 rm -rf    parler-speech/*checkpoint*
 
-rm -rf parler-tts/r308_gold_librs
+rm -rf parler-tts/r310_kr_librs
 rm -rf    parler-tts/*checkpoint*
 
 # cd ..
 
 python3 push_to_hub.py \
-    --model_name_or_path "./r308_gold_librs" \
+    --model_name_or_path "./r310_kr_librs" \
     --cache_dir "../_cache" \
-    --repo_id "r308_gold_librs"
+    --repo_id "r310_kr_librs"
